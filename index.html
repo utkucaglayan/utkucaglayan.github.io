@@ -1,79 +1,246 @@
-function calculateRoute() {
-    const docs = document.getElementById('docs').value;
-    const type = document.getElementById('type').value;
-    const style = document.getElementById('style').value;
-    const cc = document.getElementById('cc').value;
-    const road = document.getElementById('road').value;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izmir MotoRoute Planner</title>
+    <style>
+        :root {
+            --primary: #f39c12; /* Motosiklet turuncusu */
+            --bg: #0f0f0f;
+            --card: #1a1a1a;
+            --text: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .app-container {
+            background: var(--card);
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.2);
+            border: 1px solid #333;
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+
+        .input-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .full-width { grid-column: span 2; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background: #252525;
+            color: white;
+            border: 1px solid #444;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 30px;
+            background: var(--primary);
+            color: black;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #e67e22;
+            transform: scale(1.02);
+        }
+
+        #result-box {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #222;
+            border-left: 5px solid var(--primary);
+            display: none; /* JavaScript ile açılacak */
+        }
+
+        .route-title {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+        }
+
+        .route-desc {
+            color: #ccc;
+            line-height: 1.5;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h1>MotoRoute İzmir</h1>
     
-    const box = document.getElementById('result-box');
-    const title = document.getElementById('route-title');
-    const desc = document.getElementById('route-description');
+    <div class="input-section">
+        <div class="input-group full-width">
+            <label>Missing Documents?</label>
+            <select id="docs">
+                <option value="no">No, everything is ready</option>
+                <option value="yes">Yes, I have missing documents</option>
+            </select>
+        </div>
 
-    box.style.display = "block";
+        <div class="input-group">
+            <label>Motorcycle Type</label>
+            <select id="type">
+                <option value="Racing">Racing</option>
+                <option value="Naked">Naked</option>
+                <option value="Enduro">Enduro</option>
+                <option value="Touring">Touring</option>
+                <option value="Scooter">Scooter</option>
+            </select>
+        </div>
 
-    // --- REVISED 15-POINT IZMIR LOGIC MATRIX ---
-    if (docs === 'yes') {
-        title.innerText = "Ülkü Race Track (Pınarbaşı)";
-        desc.innerText = "Safety Alert: Since you have missing documents, the only legal place to ride is the professional track in Pınarbaşı.";
-    } 
-    else if (road === 'Highway' && cc === '600+' && style === 'Aggresive') {
-        title.innerText = "Kuzey Ege Highway";
-        desc.innerText = "Perfect for high-CC engines to test their limits. Wide lanes and smooth asphalt for a focused speed run.";
+        <div class="input-group">
+            <label>Riding Style</label>
+            <select id="style">
+                <option value="Aggresive">Aggressive</option>
+                <option value="Chill">Chill</option>
+                <option value="Sightseeing">Sightseeing</option>
+                <option value="Long way">Long way</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Engine CC</label>
+            <select id="cc">
+                <option value="0-250cc">0-250cc</option>
+                <option value="251-599cc">251-599cc</option>
+                <option value="600+">600cc & Above</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Preferred Road</label>
+            <select id="road">
+                <option value="Highway">Highway</option>
+                <option value="Off-road">Off-road</option>
+                <option value="Curvy">Curvy</option>
+                <option value="View">Scenic View</option>
+            </select>
+        </div>
+    </div>
+
+    <button onclick="calculateRoute()">Generate Route</button>
+
+    <div id="result-box">
+        <h3 id="route-title" class="route-title"></h3>
+        <p id="route-description" class="route-desc"></p>
+    </div>
+</div>
+
+<script>
+    function calculateRoute() {
+        // Elementleri çekiyoruz
+        const docs = document.getElementById('docs').value;
+        const type = document.getElementById('type').value;
+        const style = document.getElementById('style').value;
+        const cc = document.getElementById('cc').value;
+        const road = document.getElementById('road').value;
+        
+        const box = document.getElementById('result-box');
+        const title = document.getElementById('route-title');
+        const desc = document.getElementById('route-description');
+
+        // Sonuç kutusunu görünür yap
+        box.style.display = "block";
+
+        // MANTIK MATRİSİ (Logic Matrix)
+        if (docs === 'yes') {
+            title.innerText = "Ülkü Race Track (Pınarbaşı)";
+            desc.innerText = "Safety Alert: Since you have missing documents, the only legal place to ride is the professional track in Pınarbaşı.";
+        } 
+        else if (road === 'Highway' && cc === '600+' && style === 'Aggresive') {
+            title.innerText = "Kuzey Ege Highway";
+            desc.innerText = "Perfect for high-CC engines to test their limits. Wide lanes and smooth asphalt for a focused speed run.";
+        }
+        else if (type === 'Enduro' && road === 'Off-road' && style === 'Aggresive') {
+            title.innerText = "Balçova Therapy Forest";
+            desc.innerText = "Hardcore off-road trails. Technical climbs and narrow paths for experienced Enduro riders.";
+        }
+        else if (road === 'Off-road') {
+            title.innerText = "Homeros Valley (Bornova)";
+            desc.innerText = "A great off-road experience surrounded by nature. Perfect for exploring İzmir's hidden valleys.";
+        }
+        else if (type === 'Naked' && road === 'Curvy' && cc === '600+') {
+            title.innerText = "Sabuncubeli Curves";
+            desc.innerText = "Famous tight corners on the old Manisa road. Ideal for Naked bikes with high torque.";
+        }
+        else if (road === 'Curvy' && road === 'View') {
+            title.innerText = "Karaburun Curvy Road";
+            desc.innerText = "Legendary seaside curves. A mix of technical riding and breathtaking Aegean views.";
+        }
+        else if (style === 'Long way' && road === 'View') {
+            title.innerText = "İzmir Center to Foça Marina";
+            desc.innerText = "A beautiful long-distance ride. Enjoy the scenery as you cruise towards the historical Foça port.";
+        }
+        else if (type === 'Scooter' && style === 'Chill') {
+            title.innerText = "İnciraltı Coastline";
+            desc.innerText = "A relaxed, local favorite. Great for a quick escape to the sea air without leaving the city.";
+        }
+        else if (style === 'Sightseeing' && road === 'View') {
+            title.innerText = "Alsancak to Güzelbahçe";
+            desc.innerText = "Ride through the entire coastline of İzmir. Sunset views and city lights all the way to Güzelbahçe.";
+        }
+        else if (type === 'Racing' && road === 'Curvy') {
+            title.innerText = "Urla Old Coastal Pass";
+            desc.innerText = "Sharp bends and sea level riding. A focused route for agile sports bikes.";
+        }
+        else if (type === 'Naked' && style === 'Chill') {
+            title.innerText = "Göztepe - Sahilevleri";
+            desc.innerText = "Short city hops with plenty of Göztepe spirit. Great for a quick evening cruise.";
+        }
+        else if (cc === '0-250cc' && road === 'Curvy') {
+            title.innerText = "Gülbahçe Village Route";
+            desc.innerText = "Low engine power friendly curves. Safe, fun, and very scenic for entry-level riders.";
+        }
+        else {
+            title.innerText = "İzmir Bay Loop";
+            desc.innerText = "A general city route. Ride from Konak to Karşıyaka and enjoy the spirit of the city.";
+        }
     }
-    else if (type === 'Enduro' && road === 'Off-road' && style === 'Aggresive') {
-        title.innerText = "Balçova Therapy Forest";
-        desc.innerText = "Hardcore off-road trails. Technical climbs and narrow paths for experienced Enduro riders.";
-    }
-    else if (road === 'Off-road') {
-        title.innerText = "Homeros Valley (Bornova)";
-        desc.innerText = "A great off-road experience surrounded by nature. Perfect for exploring İzmir's hidden valleys.";
-    }
-    else if (type === 'Naked' && road === 'Curvy' && cc === '600+') {
-        title.innerText = "Sabuncubeli Curves";
-        desc.innerText = "Famous tight corners on the old Manisa road. Ideal for Naked bikes with high torque.";
-    }
-    else if (road === 'Curvy' && road === 'View') {
-        title.innerText = "Karaburun Curvy Road";
-        desc.innerText = "Legendary seaside curves. A mix of technical riding and breathtaking Aegean views.";
-    }
-    else if (style === 'Long way' && road === 'View') {
-        title.innerText = "İzmir Center to Foça Marina";
-        desc.innerText = "A beautiful long-distance ride. Enjoy the scenery as you cruise towards the historical Foça port.";
-    }
-    else if (type === 'Scooter' && style === 'Chill') {
-        title.innerText = "İnciraltı Coastline";
-        desc.innerText = "A relaxed, local favorite. Great for a quick escape to the sea air without leaving the city.";
-    }
-    else if (style === 'Sightseeing' && road === 'View') {
-        title.innerText = "Alsancak to Güzelbahçe";
-        desc.innerText = "Ride through the entire coastline of İzmir. Sunset views and city lights all the way to Güzelbahçe.";
-    }
-    else if (type === 'Racing' && road === 'Curvy') {
-        title.innerText = "Urla Old Coastal Pass";
-        desc.innerText = "Sharp bends and sea level riding. A focused route for agile sports bikes.";
-    }
-    else if (type === 'Touring' && style === 'Chill') {
-        title.innerText = "Seferihisar Side Roads";
-        desc.innerText = "Peaceful, low-traffic roads perfect for a heavy touring bike and a relaxed pace.";
-    }
-    else if (type === 'Naked' && style === 'Chill') {
-        title.innerText = "Göztepe - Sahilevleri";
-        desc.innerText = "Short city hops with plenty of Göztepe spirit. Great for a quick evening cruise.";
-    }
-    else if (cc === '0-250cc' && road === 'Curvy') {
-        title.innerText = "Gülbahçe Village Route";
-        desc.innerText = "Low engine power friendly curves. Safe, fun, and very scenic for entry-level riders.";
-    }
-    else if (type === 'Enduro' && style === 'Long way') {
-        title.innerText = "Kozak Plateau (Bergama)";
-        desc.innerText = "A long ride through pine forests and mountain air. Best for an adventurous spirit.";
-    }
-    else if (road === 'Highway') {
-        title.innerText = "İzmir - Çeşme Highway";
-        desc.innerText = "The classic route. Safe asphalt and steady winds for a standard cruise.";
-    }
-    else {
-        title.innerText = "İzmir Bay Loop";
-        desc.innerText = "A general city route. Ride from Konak to Karşıyaka and enjoy the spirit of the city.";
-    }
-}
+</script>
+
+</body>
+</html>
