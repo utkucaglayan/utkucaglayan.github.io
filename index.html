@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izmir MotoRoute - Recommendation App</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #1a1a1a; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background-color: #2d2d2d; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: 500px; width: 100%; }
+        h1 { text-align: center; color: #f39c12; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #bdc3c7; }
+        select { width: 100%; padding: 10px; border-radius: 5px; background-color: #3d3d3d; color: white; border: 1px solid #444; }
+        button { width: 100%; padding: 12px; margin-top: 20px; border: none; border-radius: 5px; background-color: #f39c12; color: white; font-weight: bold; cursor: pointer; }
+        #result-container { margin-top: 25px; padding: 20px; border-radius: 5px; background-color: #34495e; display: none; border-left: 5px solid #f39c12; }
+        .result-title { font-weight: bold; font-size: 20px; color: #f1c40f; display: block; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Izmir MotoRoute</h1>
+    <div class="form-group">
+        <label>Missing Documents?</label>
+        <select id="docs"><option value="no">No</option><option value="yes">Yes</option></select>
+    </div>
+    <div class="form-group">
+        <label>Motorcycle Type</label>
+        <select id="type">
+            <option value="Racing">Racing</option><option value="Naked">Naked</option>
+            <option value="Enduro">Enduro</option><option value="Touring">Touring</option><option value="Scooter">Scooter</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Riding Style</label>
+        <select id="style">
+            <option value="Aggresive">Aggresive</option><option value="Chill">Chill</option>
+            <option value="Sightseeing">Sightseeing</option><option value="Long way">Long way</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Engine CC</label>
+        <select id="cc"><option value="0-250cc">0-250cc</option><option value="251-599cc">251-599cc</option><option value="600+">600cc+</option></select>
+    </div>
+    <div class="form-group">
+        <label>Road Type</label>
+        <select id="road">
+            <option value="Highway">Highway</option><option value="Off-road">Off-road</option>
+            <option value="Curvy">Curvy</option><option value="View">View</option>
+        </select>
+    </div>
+    <button onclick="getRecommendation()">Find My Route</button>
+    <div id="result-container">
+        <span class="result-title" id="result-name"></span>
+        <p id="result-text"></p>
+    </div>
+</div>
+
+<script>
+    function getRecommendation() {
+        const docs = document.getElementById('docs').value;
+        const type = document.getElementById('type').value;
+        const style = document.getElementById('style').value;
+        const road = document.getElementById('road').value;
+        const resCont = document.getElementById('result-container');
+        const resName = document.getElementById('result-name');
+        const resText = document.getElementById('result-text');
+
+        resCont.style.display = 'block';
+
+        if (docs === 'yes') {
+            resName.innerText = "Ülkü Race Track";
+            resText.innerText = "Since documents are missing, stay safe at the track!";
+        } else if (type === 'Racing' && style === 'Aggresive') {
+            resName.innerText = "Urla-Çeşme Highway";
+            resText.innerText = "High speed and smooth asphalt for your racing bike.";
+        } else if (type === 'Enduro' && road === 'Off-road') {
+            resName.innerText = "Balçova Therapy Forest";
+            resText.innerText = "Technical dirt trails for your adventure.";
+        } else {
+            resName.innerText = "Karaburun Coastal Road";
+            resText.innerText = "A beautiful scenic ride along the Aegean coast.";
+        }
+    }
+</script>
+</body>
+</html>
