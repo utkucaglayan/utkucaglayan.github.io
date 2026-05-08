@@ -1,204 +1,473 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Izmir MotoRoute - Visual Planner</title>
-    <style>
-        :root {
-            --primary: #f39c12;
-            --overlay: rgba(0, 0, 0, 0.85);
-        }
 
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&amp;family=JetBrains+Mono:wght@700&amp;family=Barlow+Condensed:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed-variant": "#7a3000",
+                      "on-secondary-container": "#b6b5b4",
+                      "inverse-surface": "#e5e2e1",
+                      "error": "#ffb4ab",
+                      "surface-variant": "#353535",
+                      "outline": "#a98a7d",
+                      "on-tertiary-fixed-variant": "#005047",
+                      "secondary": "#c8c6c6",
+                      "surface-bright": "#393939",
+                      "on-primary-fixed": "#351000",
+                      "on-error": "#690005",
+                      "on-secondary-fixed-variant": "#474747",
+                      "inverse-on-surface": "#313030",
+                      "inverse-primary": "#a04100",
+                      "on-tertiary": "#003731",
+                      "primary": "#ffb693",
+                      "tertiary": "#59dbc7",
+                      "outline-variant": "#5a4136",
+                      "on-primary-container": "#572000",
+                      "secondary-fixed-dim": "#c8c6c6",
+                      "primary-fixed-dim": "#ffb693",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "background": "#131313",
+                      "secondary-fixed": "#e4e2e1",
+                      "on-error-container": "#ffdad6",
+                      "on-background": "#e5e2e1",
+                      "tertiary-fixed": "#79f7e3",
+                      "primary-fixed": "#ffdbcc",
+                      "on-primary": "#561f00",
+                      "on-secondary": "#303030",
+                      "surface-container": "#20201f",
+                      "error-container": "#93000a",
+                      "surface-container-lowest": "#0e0e0e",
+                      "surface-container-low": "#1c1b1b",
+                      "surface-container-high": "#2a2a2a",
+                      "on-tertiary-container": "#003832",
+                      "surface-container-highest": "#353535",
+                      "tertiary-container": "#11ac9a",
+                      "tertiary-fixed-dim": "#59dbc7",
+                      "surface": "#131313",
+                      "on-tertiary-fixed": "#00201c",
+                      "surface-tint": "#ffb693",
+                      "primary-container": "#ff6b00",
+                      "surface-dim": "#131313",
+                      "on-surface-variant": "#e2bfb0",
+                      "secondary-container": "#474747",
+                      "on-surface": "#e5e2e1"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin": "24px",
+                      "unit": "4px",
+                      "card-padding": "20px",
+                      "gutter": "16px",
+                      "map-overlay-gap": "12px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Montserrat"],
+                      "label-caps": ["JetBrains Mono"],
+                      "body-lg": ["Barlow Condensed"],
+                      "headline-lg": ["Montserrat"],
+                      "body-md": ["Barlow Condensed"],
+                      "stat-display": ["Montserrat"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "1.5", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "headline-lg": ["40px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0.01em", "fontWeight": "400"}],
+                      "stat-display": ["32px", {"lineHeight": "1", "letterSpacing": "0", "fontWeight": "900"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
         body {
-            font-family: 'Segoe UI', sans-serif;
-            /* Arka Plan: İzmir Genel Manzara */
-            background: linear-gradient(var(--overlay), var(--overlay)), 
-                        url('https://images.pexels.com/photos/15206533/pexels-photo-15206533.jpeg') no-repeat center center fixed;
-            background-size: cover;
-            color: white;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Barlow Condensed', sans-serif;
         }
-
-        .app-container {
-            background: rgba(25, 25, 25, 0.95);
-            max-width: 600px;
-            width: 100%;
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.9);
-            border: 1px solid var(--primary);
-            backdrop-filter: blur(8px);
+        .route-card-gradient {
+            background: linear-gradient(180deg, rgba(19, 19, 19, 0) 0%, rgba(19, 19, 19, 0.9) 100%);
         }
-
-        h1 { text-align: center; color: var(--primary); text-transform: uppercase; letter-spacing: 3px; margin-top: 0; }
-
-        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .full { grid-column: span 2; }
-        
-        label { display: block; margin-bottom: 5px; font-size: 13px; color: #bbb; font-weight: bold; }
-        select { width: 100%; padding: 12px; border-radius: 6px; background: #222; color: white; border: 1px solid #444; outline: none; }
-        select:focus { border-color: var(--primary); }
-
-        button {
-            width: 100%; padding: 16px; margin-top: 25px;
-            background: var(--primary); color: black; border: none;
-            border-radius: 8px; font-weight: 800; font-size: 16px; cursor: pointer;
-            transition: 0.3s; text-transform: uppercase;
-        }
-
-        button:hover { background: #e67e22; transform: scale(1.02); }
-
-        /* Sonuç Alanı */
-        #result-box {
-            margin-top: 30px; padding: 25px; border-radius: 15px;
-            background: #111; display: none; text-align: center;
-            border: 1px solid #333; animation: fadeIn 0.6s ease;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        #route-image {
-            width: 100%; height: 280px; object-fit: cover;
-            border-radius: 12px; margin-bottom: 20px;
-            border: 2px solid var(--primary);
-        }
-
-        .route-title { color: var(--primary); font-size: 24px; font-weight: bold; margin-bottom: 12px; }
-        .route-desc { color: #ddd; font-size: 15px; line-height: 1.6; margin: 0; }
     </style>
 </head>
-<body>
-
-<div class="app-container">
-    <h1>MotoRoute İzmir</h1>
-    
-    <div class="grid-inputs">
-        <div class="full">
-            <label>Missing Documents?</label>
-            <select id="docs">
-                <option value="no">No, everything is okay</option>
-                <option value="yes">Yes, I have missing documents</option>
-            </select>
-        </div>
-        <div>
-            <label>Motorcycle Type</label>
-            <select id="type">
-                <option value="Racing">Racing</option>
-                <option value="Naked">Naked</option>
-                <option value="Enduro">Enduro</option>
-                <option value="Touring">Touring</option>
-                <option value="Scooter">Scooter</option>
-            </select>
-        </div>
-        <div>
-            <label>Riding Style</label>
-            <select id="style">
-                <option value="Aggresive">Aggressive</option>
-                <option value="Chill">Chill</option>
-                <option value="Sightseeing">Sightseeing</option>
-                <option value="Long way">Long way</option>
-            </select>
-        </div>
-        <div>
-            <label>Engine CC</label>
-            <select id="cc">
-                <option value="0-250cc">0-250cc</option>
-                <option value="251-599cc">251-599cc</option>
-                <option value="600+">600cc & Above</option>
-            </select>
-        </div>
-        <div>
-            <label>Road Type</label>
-            <select id="road">
-                <option value="Highway">Highway</option>
-                <option value="Off-road">Off-road</option>
-                <option value="Curvy">Curvy</option>
-                <option value="View">View</option>
-            </select>
-        </div>
-    </div>
-
-    <button onclick="getRoute()">GENERATE ROUTE</button>
-
-    <div id="result-box">
-        <img id="route-image" src="" alt="Route Recommendation">
-        <div id="route-title" class="route-title"></div>
-        <p id="route-description" class="route-desc"></p>
-    </div>
+<body class="antialiased overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-background border-b border-outline-variant flex justify-between items-center px-margin h-16">
+<div class="font-headline-lg text-headline-lg font-black text-primary tracking-tighter">AEGEAN RIDER</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Harita</a>
+<a class="text-primary font-bold hover:text-primary transition-colors" href="#">Keşfet</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Garaj</a>
 </div>
-
-<script>
-    function getRoute() {
-        const docs = document.getElementById('docs').value;
-        const type = document.getElementById('type').value;
-        const road = document.getElementById('road').value;
-        const cc = document.getElementById('cc').value;
-        const style = document.getElementById('style').value;
-
-        const box = document.getElementById('result-box');
-        const img = document.getElementById('route-image');
-        const title = document.getElementById('route-title');
-        const desc = document.getElementById('route-description');
-
-        let rName, rDesc, rImg;
-
-        // --- UPDATED LOCAL LOGIC MATRIX ---
-        if (docs === 'yes') {
-            rName = "Ülkü Race Track (Pınarbaşı)";
-            rDesc = "Safety First! Since you have missing documents, stay on the professional track in Pınarbaşı for legal riding.";
-            rImg = "https://images.pexels.com/photos/163789/race-car-race-track-speedway-auto-racing-163789.jpeg"; 
-        } 
-        else if (road === 'Highway' && cc === '600+' && style === 'Aggresive') {
-            rName = "Kuzey Ege Highway";
-            rDesc = "Perfect for high-CC engines to test their limits. Wide lanes and smooth asphalt for a focused speed run.";
-            rImg = "https://images.pexels.com/photos/2583471/pexels-photo-2583471.jpeg";
-        }
-        else if (type === 'Enduro' && road === 'Off-road') {
-            rName = "Balçova Therapy Forest";
-            rDesc = "Hardcore technical trails inside the city forest. Best for experienced Enduro riders.";
-            rImg = "https://images.pexels.com/photos/1038935/pexels-photo-1038935.jpeg";
-        }
-        else if (road === 'Off-road') {
-            rName = "Homeros Valley (Bornova)";
-            rDesc = "Explore the dirt paths of Bornova. Great for light off-road and nature lovers.";
-            rImg = "https://images.pexels.com/photos/914804/pexels-photo-914804.jpeg";
-        }
-        else if (road === 'Curvy' && (type === 'Racing' || type === 'Naked' || cc === '600+')) {
-            rName = "Sabuncubeli Curves / Karaburun Curvy Road";
-            rDesc = "Technical bends and leaning points. Whether it's the old Manisa road or the peninsula, enjoy the curves!";
-            rImg = "https://images.pexels.com/photos/1546901/pexels-photo-1546901.jpeg";
-        }
-        else if (style === 'Long way' && road === 'View') {
-            rName = "İzmir Center to Foça Marina";
-            rDesc = "A beautiful long-distance cruise. Scenic views leading to the historical Foça port.";
-            rImg = "https://images.pexels.com/photos/2361601/pexels-photo-2361601.jpeg";
-        }
-        else if (type === 'Scooter' && style === 'Chill') {
-            rName = "İnciraltı Coastline";
-            rDesc = "The perfect escape within the city. Relaxed ride and easy breeze.";
-            rImg = "https://images.pexels.com/photos/3405001/pexels-photo-3405001.jpeg";
-        }
-        else {
-            // "Bay Loop" yerine senin belirttiğin Kordon - Güzelbahçe hattı
-            rName = "Alsancak Kordon - Güzelbahçe Coastline";
-            rDesc = "A legendary ride along İzmir's coastline. Pass through Kordon, Göztepe, and Narlıdere all the way to Güzelbahçe.";
-            rImg = "https://images.pexels.com/photos/15206533/pexels-photo-15206533.jpeg";
-        }
-
-        // DOM Update
-        title.innerText = rName;
-        desc.innerText = rDesc;
-        img.src = rImg;
-        box.style.display = "block";
-        
-        // Otomatik kaydır (Sonuca odaklanmak için)
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }
-</script>
-
-</body>
-</html>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer active:scale-95 duration-150">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer active:scale-95 duration-150">settings</span>
+<img alt="Rider Profile" class="w-8 h-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjKim7Tz3bGkURLs6t6p3V4o8MRSgLmPuQ5uPbAV5hNcd0GpDQurYXrYYgQ48Jj5MNQu5CF_3UlAMe9fzmAwFhHFio4Y9o5ApdMxmK_mHprJprD5qOAezuIxgUqdNxXCOOUJFLLk23m987uoxNVnlBAROU2yQdy1e09vPX5hhmpld9ImWjZ3wb-IlM_4w4kSapak9yydLFifZbf9lhyrgGRH2JN-w9Hevkl4cBRvWZTWsjFTVP2ZiFJs8a3FLgjy-WNrJAzOq0css"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Desktop Only) -->
+<aside class="hidden lg:flex flex-col py-margin h-full w-64 fixed left-0 top-0 bg-surface-container-high border-r border-outline-variant pt-20">
+<div class="px-6 mb-8">
+<div class="font-headline-md text-headline-md text-primary">Izmir Overland</div>
+<div class="text-on-surface-variant text-sm font-medium">Sürüşe Hazır</div>
+</div>
+<nav class="flex-1 flex flex-col">
+<a class="flex items-center gap-4 px-6 py-4 text-on-surface-variant hover:bg-surface-variant transition-all active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-4 bg-primary-container text-on-primary-container font-bold border-l-4 border-primary transition-all active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-caps text-label-caps">Route Discovery</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-4 text-on-surface-variant hover:bg-surface-variant transition-all active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">route</span>
+<span class="font-label-caps text-label-caps">Saved Routes</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-4 text-on-surface-variant hover:bg-surface-variant transition-all active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">motorcycle</span>
+<span class="font-label-caps text-label-caps">Garage</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-4 text-on-surface-variant hover:bg-surface-variant transition-all active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-caps text-label-caps">Document Check</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full bg-primary-container text-on-primary-container font-black py-4 rounded-lg font-headline-md text-sm tracking-widest active:scale-95 duration-150">
+                START ROUTE
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="lg:ml-64 pt-20 pb-24 lg:pb-8 px-6 min-h-screen">
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+<!-- Filter Sidebar (Left column in grid) -->
+<section class="xl:col-span-3 space-y-6">
+<div class="bg-surface-container-high p-card-padding border border-outline-variant">
+<h2 class="font-headline-md text-headline-md text-primary mb-6">ROTA FİLTRESİ</h2>
+<div class="space-y-8">
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-4">SÜRÜŞ STİLİ</label>
+<div class="space-y-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="form-checkbox bg-transparent border-primary text-primary focus:ring-0 rounded-sm" type="checkbox"/>
+<span class="font-body-md text-body-md group-hover:text-primary">Virajlı Yollar (Twisty)</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="form-checkbox bg-transparent border-primary text-primary focus:ring-0 rounded-sm" type="checkbox"/>
+<span class="font-body-md text-body-md group-hover:text-primary">Manzaralı Sürüş (Scenic)</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="form-checkbox bg-transparent border-primary text-primary focus:ring-0 rounded-sm" type="checkbox"/>
+<span class="font-body-md text-body-md group-hover:text-primary">Hızlı Otoban (Highway)</span>
+</label>
+</div>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-4">MOTOSİKLET TİPİ</label>
+<div class="grid grid-cols-2 gap-3">
+<button class="border border-outline-variant py-2 font-label-caps text-label-caps hover:bg-primary hover:text-black transition-colors">ADVENTURE</button>
+<button class="border border-primary bg-primary text-black py-2 font-label-caps text-label-caps">SPORT</button>
+<button class="border border-outline-variant py-2 font-label-caps text-label-caps hover:bg-primary hover:text-black transition-colors">CRUISER</button>
+<button class="border border-outline-variant py-2 font-label-caps text-label-caps hover:bg-primary hover:text-black transition-colors">ENDURO</button>
+</div>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-4">YOL YÜZEYİ</label>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-surface-container-highest border border-outline-variant text-[10px] font-bold tracking-widest">ASFALT</span>
+<span class="px-3 py-1 border border-outline-variant text-[10px] font-bold tracking-widest text-on-surface-variant">TOPRAK</span>
+<span class="px-3 py-1 border border-outline-variant text-[10px] font-bold tracking-widest text-on-surface-variant">MICIR</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Weather Widget -->
+<div class="bg-surface-container-high p-card-padding border border-outline-variant">
+<h3 class="font-headline-md text-sm text-primary mb-4 tracking-wider">HAVA DURUMU</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center bg-surface-container border-l-2 border-primary p-3">
+<div>
+<div class="font-label-caps text-[10px]">İZMİR MERKEZ</div>
+<div class="font-stat-display text-lg">24°C</div>
+</div>
+<span class="material-symbols-outlined text-tertiary">wb_sunny</span>
+</div>
+<div class="flex justify-between items-center bg-surface-container border-l-2 border-tertiary p-3">
+<div>
+<div class="font-label-caps text-[10px]">ÇEŞME</div>
+<div class="font-stat-display text-lg">21°C</div>
+</div>
+<span class="material-symbols-outlined text-secondary">air</span>
+</div>
+<div class="flex justify-between items-center bg-surface-container border-l-2 border-outline-variant p-3">
+<div>
+<div class="font-label-caps text-[10px]">SEFERİHİSAR</div>
+<div class="font-stat-display text-lg">22°C</div>
+</div>
+<span class="material-symbols-outlined text-tertiary">partly_cloudy_day</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Route Cards Grid (Right columns in grid) -->
+<section class="xl:col-span-9">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h1 class="font-headline-lg text-headline-lg">ROTA KEŞFİ</h1>
+<p class="font-body-lg text-on-surface-variant">Ege'nin en iyi sürüş rotalarını keşfet.</p>
+</div>
+<div class="hidden md:flex gap-4">
+<span class="font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1">POPÜLER</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant pb-1 cursor-pointer hover:text-primary">YAKINDAKİLER</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant pb-1 cursor-pointer hover:text-primary">ZORLUK</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Route Card 1 -->
+<div class="group relative bg-surface-container overflow-hidden border border-outline-variant">
+<div class="aspect-video w-full relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A wide panoramic shot of a motorcycle leaning into a sharp curve on a coastal Aegean road. The sun is setting, casting a deep orange glow across the asphalt and the nearby Aegean Sea. The mood is adventurous and free, with high contrast between the dark road and the vibrant sky." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGkbAhFhE7GDMo7cJTyrPHE2vAWIjAn-dVqFjvB4iH1SSs1HVAcw4xOurEEQ8TQl6nTpU-qZ2skYi2d-Q0A4FMhJfHQk2qxKRxUxSO1PsVZ6NZMycHBpz80Kj5vQf2ZzAynal6b0Wclm1Q21BH2ZP_3A6aezkzhkCuKW1fUOeIgzJYhwrqjkilo5nnJr5OMwqTuSs_i2UtaaxdoCHJKi9Sbsk-Iy0ys-JTQvc_CrNIBTD-zAR5dZphBZOZpUP63dnaa4YVI5nb0oI"/>
+<div class="absolute inset-0 route-card-gradient"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-tertiary text-on-tertiary text-[10px] font-bold px-2 py-1 uppercase tracking-tighter">Sahil Yolu</span>
+<span class="bg-primary-container text-black text-[10px] font-bold px-2 py-1 uppercase tracking-tighter">Popüler</span>
+</div>
+</div>
+<div class="p-card-padding">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline-md text-headline-md">Urla - Karaburun Yarımadası</h3>
+<div class="text-right">
+<div class="font-label-caps text-[10px] text-on-surface-variant">ZORLUK</div>
+<div class="text-primary flex gap-0.5">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xs">star</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-6">
+<div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase">Mesafe</div>
+<div class="font-stat-display text-xl">112<span class="text-xs ml-1">KM</span></div>
+</div>
+<div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase">Yükseklik</div>
+<div class="font-stat-display text-xl">840<span class="text-xs ml-1">M</span></div>
+</div>
+<div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase">Yüzey</div>
+<div class="font-stat-display text-xl">%100<span class="text-xs ml-1 uppercase">Paved</span></div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 bg-primary text-black font-label-caps py-3 flex items-center justify-center gap-2 active:scale-95 duration-150">
+<span class="material-symbols-outlined text-lg">navigation</span> HARİTADA GÖR
+                                </button>
+<button class="px-4 border border-outline-variant hover:border-primary text-on-surface transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Route Card 2 -->
+<div class="group relative bg-surface-container overflow-hidden border border-outline-variant">
+<div class="aspect-video w-full relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A rugged mountain motorcycle trail winding through silver-green olive groves in the Aegean countryside. The lighting is harsh midday sun, highlighting the dusty texture of the path and the vibrant teal of distant hills. The style is sharp and professional, emphasizing the mechanical details of the motorcycle parked at a viewpoint." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYh_q0RK5WiGYfDerys9RM_irZarTvyUojSTtCDo8xPrKsYbkb8JR5XeL_mOVdaLGOcq_CvNhfT9x82Gzdfz99L3XyGw4RKG6qonQhApHvp4vqb3HonlR64PWwN0tVPQyvfJv_dJLr6inuZaIybgN4jZNdBLN-sLng2cHri6uB9uhovSMAYrUd-Al6Z5SjomEXaMaSjByb2Zhy5It33rvJg0z7VDNA-zQsOICzhHFpjS90wA_-jxivkpTz39GJdYyhx1m5vHUSk7Y"/>
+<div class="absolute inset-0 route-card-gradient"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-outline-variant text-white text-[10px] font-bold px-2 py-1 uppercase tracking-tighter">Zorlu Arazi</span>
+</div>
+</div>
+<div class="p-card-padding">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline-md text-headline-md">Seferihisar Dağ Yolları</h3>
+<div class="text-right">
+<div class="font-label-caps text-[10px] text-on-surface-variant">ZORLUK</div>
+<div class="text-primary flex gap-0.5">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-6">
+<div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase">Mesafe</div>
+<div class="font-stat-display text-xl">45<span class="text-xs ml-1">KM</span></div>
+</div>
+<div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase">Yükseklik</div>
+<div class="font-stat-display text-xl">1200<span class="text-xs ml-1">M</span></div>
+</div>
+<div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase">Yüzey</div>
+<div class="font-stat-display text-xl">%60<span class="text-xs ml-1 uppercase">Dirt</span></div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 bg-primary text-black font-label-caps py-3 flex items-center justify-center gap-2 active:scale-95 duration-150">
+<span class="material-symbols-outlined text-lg">navigation</span> HARİTADA GÖR
+                                </button>
+<button class="px-4 border border-outline-variant hover:border-primary text-on-surface transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Route Card 3 -->
+<div class="group relative bg-surface-container overflow-hidden border border-outline-variant">
+<div class="aspect-video w-full relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A motorcyclist riding through a historic village in Izmir with ancient stone walls and cobblestone streets. The early morning light creates long, dramatic shadows and highlights the rich textures of the old town. The color palette is earthy and warm, focusing on browns, greys, and deep asphalt tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDy_m6fZlJOdMImQXAeyRmJ-_6Dge_rZ8kAdSg4G-mnyuFKD038Oikmh1LkLRZTxNWXUw-v8276paVa11qX4L_OaYYU9YmqbrZv_uU1X9YjF7uCHKlTXMHmthBMb6ZGnuIs4v_Oa26MWe3EpihOLJJu9snLKjvvel8eevhnjRS2Grzj5C2Iaq_frHd6cOQnT1oDaeVRbdVBg4rerxFjaHhXhbd05wTnDofqnLKkWsZtDUgdfURGcF6bqZQHiG_sljPK7SVgGwCiAV8"/>
+<div class="absolute inset-0 route-card-gradient"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-tertiary-container text-on-tertiary-container text-[10px] font-bold px-2 py-1 uppercase tracking-tighter">Kültür Turu</span>
+</div>
+</div>
+<div class="p-card-padding">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline-md text-headline-md">Efes Antik Yolu</h3>
+<div class="text-right">
+<div class="font-label-caps text-[10px] text-on-surface-variant">ZORLUK</div>
+<div class="text-primary flex gap-0.5">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xs">star</span>
+<span class="material-symbols-outlined text-xs">star</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-6">
+<div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase">Mesafe</div>
+<div class="font-stat-display text-xl">88<span class="text-xs ml-1">KM</span></div>
+</div>
+<div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase">Yükseklik</div>
+<div class="font-stat-display text-xl">350<span class="text-xs ml-1">M</span></div>
+</div>
+<div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase">Yüzey</div>
+<div class="font-stat-display text-xl">%90<span class="text-xs ml-1 uppercase">Paved</span></div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 bg-primary text-black font-label-caps py-3 flex items-center justify-center gap-2 active:scale-95 duration-150">
+<span class="material-symbols-outlined text-lg">navigation</span> HARİTADA GÖR
+                                </button>
+<button class="px-4 border border-outline-variant hover:border-primary text-on-surface transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Route Card 4 -->
+<div class="group relative bg-surface-container overflow-hidden border border-outline-variant">
+<div class="aspect-video w-full relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A long, straight stretch of road leading towards the Aegean horizon, flanked by sun-bleached fields and small pine clusters. The aesthetic is high-performance, with a focus on speed and machine precision. The lighting is bright and clear, emphasizing the stark contrast of the safety orange safety gear against the dark asphalt." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRYeskgzxWZpYystLNSxAiKgel1u50sfA53OPOt9X50nbLOm5ZHn1hnRAejjYTMktImHnS_td6fRczR2tmocD_b_DT5SSdWkTnalko7GQtzPE6Y6WS7B5k9OMgU4No89a_FpqTH-0f-67pn38hgS9s7dSKlMe82kXUZdyvn3PvGUPj3ITU6r2TDONQcALx8wiRGBeWSrXfUeSeDrFRTYwp7izE4jPYQT0WUK8q4vpZ89Q3suggooMoFYFqDdqSTp3F_YNIHd6_adc"/>
+<div class="absolute inset-0 route-card-gradient"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-primary text-black text-[10px] font-bold px-2 py-1 uppercase tracking-tighter">Hız &amp; Konfor</span>
+</div>
+</div>
+<div class="p-card-padding">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline-md text-headline-md">İzmir - Çeşme Otobanı</h3>
+<div class="text-right">
+<div class="font-label-caps text-[10px] text-on-surface-variant">ZORLUK</div>
+<div class="text-primary flex gap-0.5">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xs">star</span>
+<span class="material-symbols-outlined text-xs">star</span>
+<span class="material-symbols-outlined text-xs">star</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-6">
+<div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase">Mesafe</div>
+<div class="font-stat-display text-xl">75<span class="text-xs ml-1">KM</span></div>
+</div>
+<div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase">Yükseklik</div>
+<div class="font-stat-display text-xl">120<span class="text-xs ml-1">M</span></div>
+</div>
+<div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase">Yüzey</div>
+<div class="font-stat-display text-xl">%100<span class="text-xs ml-1 uppercase">Paved</span></div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 bg-primary text-black font-label-caps py-3 flex items-center justify-center gap-2 active:scale-95 duration-150">
+<span class="material-symbols-outlined text-lg">navigation</span> HARİTADA GÖR
+                                </button>
+<button class="px-4 border border-outline-variant hover:border-primary text-on-surface transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Telemetry Bar (Persistent Bottom Status) -->
+<div class="fixed bottom-20 lg:bottom-0 left-0 w-full bg-surface-container-lowest h-10 border-t border-outline-variant flex items-center px-6 justify-between z-40 hidden md:flex">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-[10px] text-on-surface-variant">SİSTEM DURUMU:</span>
+<span class="font-label-caps text-[10px] text-tertiary">AKTİF</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-[10px] text-on-surface-variant">GPS:</span>
+<span class="font-label-caps text-[10px] text-tertiary">BAĞLI</span>
+</div>
+</div>
+<div class="font-label-caps text-[10px] text-on-surface-variant">
+            AEGEAN RIDER v4.2 // OVERLAND NAVIGATION
+        </div>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-20 px-4 pb-4 bg-surface-container-lowest border-t border-outline-variant shadow-lg z-50 rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-4 hover:text-on-surface active:scale-90 transition-transform duration-100">
+<span class="material-symbols-outlined">navigation</span>
+<span class="font-label-caps text-label-caps">Harita</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl py-1 px-4 active:scale-90 transition-transform duration-100">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-caps text-label-caps">Keşfet</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-4 hover:text-on-surface active:scale-90 transition-transform duration-100">
+<span class="material-symbols-outlined">favorite</span>
+<span class="font-label-caps text-label-caps">Kayıtlı</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-4 hover:text-on-surface active:scale-90 transition-transform duration-100">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps">Profil</span>
+</div>
+</nav>
+</body></html>
