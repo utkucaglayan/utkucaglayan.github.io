@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Izmir MotoRoute Planner</title>
+    <title>Izmir MotoRoute - Visual Planner</title>
     <style>
         :root {
             --primary: #f39c12;
-            --bg-overlay: rgba(0, 0, 0, 0.75);
+            --overlay: rgba(0, 0, 0, 0.8);
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            /* Arka plana İzmir genel manzara ekledik */
-            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
-                        url('https://images.unsplash.com/photo-1590716202497-158869c9b98d?q=80&w=1600') no-repeat center center fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Arka Plan: İzmir Saat Kulesi / Genel Manzara */
+            background: linear-gradient(var(--overlay), var(--overlay)), 
+                        url('https://images.pexels.com/photos/15206533/pexels-photo-15206533.jpeg') no-repeat center center fixed;
             background-size: cover;
             color: white;
             margin: 0;
@@ -24,43 +24,49 @@
         }
 
         .app-container {
-            background: rgba(26, 26, 26, 0.9);
-            max-width: 650px;
+            background: rgba(30, 30, 30, 0.9);
+            max-width: 600px;
             width: 100%;
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px); /* Arka planı hafif bulanıklaştırır, daha şık durur */
-            border: 1px solid rgba(243, 156, 18, 0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            border: 1px solid var(--primary);
+            backdrop-filter: blur(5px);
         }
 
-        h1 { color: var(--primary); text-align: center; text-transform: uppercase; margin-bottom: 30px; }
+        h1 { text-align: center; color: var(--primary); text-transform: uppercase; letter-spacing: 3px; }
 
-        .input-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .full-width { grid-column: span 2; }
-        label { display: block; margin-bottom: 8px; font-size: 14px; color: #ccc; }
-        select { width: 100%; padding: 12px; border-radius: 8px; background: #333; color: white; border: 1px solid #444; }
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .full { grid-column: span 2; }
+        
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #aaa; }
+        select { width: 100%; padding: 10px; border-radius: 5px; background: #222; color: white; border: 1px solid #444; }
 
         button {
-            width: 100%; padding: 15px; margin-top: 30px;
+            width: 100%; padding: 15px; margin-top: 25px;
             background: var(--primary); color: black; border: none;
             border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer;
+            transition: 0.3s;
         }
 
-        /* Önerilen Rota Kutusu */
+        button:hover { background: #e67e22; transform: translateY(-2px); }
+
+        /* Rota Sonuç Kutusu */
         #result-box {
-            margin-top: 30px; padding: 20px; border-radius: 10px;
-            background: rgba(45, 45, 45, 0.9); display: none; text-align: center;
+            margin-top: 30px; padding: 20px; border-radius: 15px;
+            background: #111; display: none; text-align: center;
+            border: 1px solid #333;
         }
 
         #route-image {
             width: 100%; height: 250px; object-fit: cover;
             border-radius: 10px; margin-bottom: 15px;
             border: 2px solid var(--primary);
+            background-color: #222; /* Resim yüklenene kadar koyu arka plan */
         }
 
-        .route-title { color: var(--primary); font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-        .route-desc { color: #ddd; line-height: 1.5; }
+        .route-title { color: var(--primary); font-size: 22px; font-weight: bold; margin-bottom: 10px; }
+        .route-desc { color: #ccc; font-size: 15px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -68,91 +74,112 @@
 <div class="app-container">
     <h1>MotoRoute İzmir</h1>
     
-    <div class="input-section">
-        <div class="input-group full-width">
+    <div class="grid-inputs">
+        <div class="full">
             <label>Missing Documents?</label>
-            <select id="docs"><option value="no">No</option><option value="yes">Yes</option></select>
+            <select id="docs">
+                <option value="no">No, ready to go</option>
+                <option value="yes">Yes, missing documents</option>
+            </select>
         </div>
-        <div class="input-group">
+        <div>
             <label>Motorcycle Type</label>
-            <select id="type"><option value="Racing">Racing</option><option value="Naked">Naked</option><option value="Enduro">Enduro</option><option value="Touring">Touring</option><option value="Scooter">Scooter</option></select>
+            <select id="type">
+                <option value="Racing">Racing</option>
+                <option value="Naked">Naked</option>
+                <option value="Enduro">Enduro</option>
+                <option value="Touring">Touring</option>
+                <option value="Scooter">Scooter</option>
+            </select>
         </div>
-        <div class="input-group">
+        <div>
             <label>Riding Style</label>
-            <select id="style"><option value="Aggresive">Aggressive</option><option value="Chill">Chill</option><option value="Sightseeing">Sightseeing</option><option value="Long way">Long way</option></select>
+            <select id="style">
+                <option value="Aggresive">Aggressive</option>
+                <option value="Chill">Chill</option>
+                <option value="Sightseeing">Sightseeing</option>
+                <option value="Long way">Long way</option>
+            </select>
         </div>
-        <div class="input-group">
+        <div>
             <label>Engine CC</label>
-            <select id="cc"><option value="0-250cc">0-250cc</option><option value="251-599cc">251-599cc</option><option value="600+">600cc+</option></select>
+            <select id="cc">
+                <option value="0-250cc">0-250cc</option>
+                <option value="251-599cc">251-599cc</option>
+                <option value="600+">600cc+</option>
+            </select>
         </div>
-        <div class="input-group">
-            <label>Preferred Road</label>
-            <select id="road"><option value="Highway">Highway</option><option value="Off-road">Off-road</option><option value="Curvy">Curvy</option><option value="View">View</option></select>
+        <div>
+            <label>Road Type</label>
+            <select id="road">
+                <option value="Highway">Highway</option>
+                <option value="Off-road">Off-road</option>
+                <option value="Curvy">Curvy</option>
+                <option value="View">View</option>
+            </select>
         </div>
     </div>
 
-    <button onclick="calculateRoute()">Generate Route</button>
+    <button onclick="getRoute()">FIND MY ROUTE</button>
 
     <div id="result-box">
-        <img id="route-image" src="" alt="Route Image">
+        <img id="route-image" src="" alt="Route Recommendation">
         <div id="route-title" class="route-title"></div>
         <p id="route-description" class="route-desc"></p>
     </div>
 </div>
 
 <script>
-    function calculateRoute() {
+    function getRoute() {
         const docs = document.getElementById('docs').value;
         const type = document.getElementById('type').value;
-        const style = document.getElementById('style').value;
-        const cc = document.getElementById('cc').value;
         const road = document.getElementById('road').value;
-        
+        const cc = document.getElementById('cc').value;
+        const style = document.getElementById('style').value;
+
         const box = document.getElementById('result-box');
         const img = document.getElementById('route-image');
         const title = document.getElementById('route-title');
         const desc = document.getElementById('route-description');
 
-        let resultName = "";
-        let resultDesc = "";
-        let resultImg = "";
+        let rName, rDesc, rImg;
 
-        // --- MANTIK VE RESİM EŞLEŞTİRMESİ ---
+        // --- MANTIK VE GÖRSEL ATAMA ---
         if (docs === 'yes') {
-            resultName = "Ülkü Race Track (Pınarbaşı)";
-            resultDesc = "Legal and safe track for riders with missing documents.";
-            resultImg = "https://images.unsplash.com/photo-1541890289-b86df5bafd81?q=80&w=800"; // Temsili pist
+            rName = "Ülkü Race Track (Pınarbaşı)";
+            rDesc = "Safety First! Since you have missing documents, stay on the professional track in Pınarbaşı.";
+            rImg = "https://images.pexels.com/photos/163789/race-car-race-track-speedway-auto-racing-163789.jpeg"; 
         } 
         else if (road === 'Highway' && cc === '600+') {
-            resultName = "Kuzey Ege Highway";
-            resultDesc = "Fast, wide and smooth asphalt for high performance.";
-            resultImg = "https://images.unsplash.com/photo-1515003118228-5645604473b1?q=80&w=800"; // Temsili otoban
+            rName = "Kuzey Ege Highway";
+            rDesc = "The perfect spot for high-speed cruising and smooth asphalt.";
+            rImg = "https://images.pexels.com/photos/2583471/pexels-photo-2583471.jpeg";
         }
-        else if (type === 'Enduro' && road === 'Off-road') {
-            resultName = "Balçova Therapy Forest";
-            resultDesc = "The best off-road trails inside İzmir.";
-            resultImg = "https://images.unsplash.com/photo-1542137722061-efd1cbdf156c?q=80&w=800"; // Temsili orman yolu
+        else if (road === 'Off-road' || type === 'Enduro') {
+            rName = "Balçova Therapy Forest / Homeros Valley";
+            rDesc = "Dusty trails and nature's challenge await your adventure bike.";
+            rImg = "https://images.pexels.com/photos/1038935/pexels-photo-1038935.jpeg";
         }
-        else if (road === 'Curvy' && road === 'View') {
-            resultName = "Karaburun Curvy Road";
-            resultDesc = "Legendary seaside curves with amazing views.";
-            resultImg = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800"; // Temsili sahil yolu
+        else if (road === 'Curvy' && (type === 'Racing' || type === 'Naked')) {
+            rName = "Karaburun Curvy Road / Sabuncubeli";
+            rDesc = "Lean into those corners! Technical turns and amazing views.";
+            rImg = "https://images.pexels.com/photos/1546901/pexels-photo-1546901.jpeg";
         }
-        else if (type === 'Scooter' && style === 'Chill') {
-            resultName = "İnciraltı Coastline";
-            resultDesc = "Relaxed sea breeze and easy riding.";
-            resultImg = "https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?q=80&w=800"; // Temsili deniz kenarı
+        else if (type === 'Scooter' || style === 'Chill') {
+            rName = "İnciraltı & Kordon Coastline";
+            rDesc = "A relaxed city ride. Sea breeze and coffee stops all the way.";
+            rImg = "https://images.pexels.com/photos/3405001/pexels-photo-3405001.jpeg";
         }
         else {
-            resultName = "İzmir Bay Loop";
-            resultDesc = "A general tour around the beautiful gulf of İzmir.";
-            resultImg = "https://images.unsplash.com/photo-1560060141-72901682a839?q=80&w=800"; // Temsili İzmir manzarası
+            rName = "İzmir Bay Loop (Güzelyalı - Bostanlı)";
+            rDesc = "A classic tour around the Gulf of İzmir. Perfect for every rider.";
+            rImg = "https://images.pexels.com/photos/15206533/pexels-photo-15206533.jpeg";
         }
 
-        // Sonuçları ekrana bas
-        title.innerText = resultName;
-        desc.innerText = resultDesc;
-        img.src = resultImg;
+        // DOM Güncelleme
+        title.innerText = rName;
+        desc.innerText = rDesc;
+        img.src = rImg;
         box.style.display = "block";
     }
 </script>
