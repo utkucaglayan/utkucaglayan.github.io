@@ -11,13 +11,19 @@
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top right, #1e293b, #0f172a);
+            /* High-quality cinematic view of İzmir Gulf/Kordon as background */
+            background: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.85)), 
+                        url('https://images.unsplash.com/photo-1590757363901-383796851d7c?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
         }
 
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -27,39 +33,50 @@
 
         .btn-primary {
             background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
         }
 
         .result-fade-in {
-            animation: fadeIn 0.5s ease-out;
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        select option {
+            background-color: #1e293b;
+            color: white;
         }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
-    <div class="glass-card max-w-md w-full rounded-3xl p-8 shadow-2xl">
+    <div class="glass-card max-w-md w-full rounded-3xl p-8 shadow-2xl my-8 border border-white/5">
         <header class="text-center mb-8">
             <h1 class="text-3xl font-extrabold text-white tracking-tight uppercase">
                 MotoRoute <span class="moto-accent">İzmir</span>
             </h1>
-            <p class="text-slate-400 text-sm mt-2 font-medium">Find your perfect riding route in İzmir</p>
+            <p class="text-slate-300 text-sm mt-2 font-medium tracking-wide">Find your perfect riding route in İzmir</p>
         </header>
 
         <div class="space-y-5">
             <!-- Documents -->
             <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">1. License & Documents</label>
-                <select id="D" class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">1. License & Documents</label>
+                <select id="D" class="w-full bg-slate-900/60 border border-slate-700/50 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all cursor-pointer">
                     <option value="Clear">All Documents Clear</option>
                     <option value="Missing">Missing Documents</option>
                 </select>
@@ -67,8 +84,8 @@
 
             <!-- Bike Type -->
             <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">2. Motorcycle Type</label>
-                <select id="T" class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">2. Motorcycle Type</label>
+                <select id="T" class="w-full bg-slate-900/60 border border-slate-700/50 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all cursor-pointer">
                     <option value="Racing">Racing</option>
                     <option value="Touring">Touring</option>
                     <option value="Enduro">Enduro</option>
@@ -78,8 +95,8 @@
 
             <!-- Riding Style -->
             <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">3. Preferred Style</label>
-                <select id="S" class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">3. Preferred Style</label>
+                <select id="S" class="w-full bg-slate-900/60 border border-slate-700/50 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all cursor-pointer">
                     <option value="Aggressive">Aggressive</option>
                     <option value="Chill">Chill</option>
                     <option value="Sightseeing">Sightseeing</option>
@@ -89,8 +106,8 @@
 
             <!-- Engine CC -->
             <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">4. Engine Capacity</label>
-                <select id="C" class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">4. Engine Capacity</label>
+                <select id="C" class="w-full bg-slate-900/60 border border-slate-700/50 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all cursor-pointer">
                     <option value="0-250">0 - 250cc</option>
                     <option value="251-599">251 - 599cc</option>
                     <option value="600+">600cc and above</option>
@@ -99,8 +116,8 @@
 
             <!-- Road Preference -->
             <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">5. Road Environment</label>
-                <select id="R" class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">5. Road Environment</label>
+                <select id="R" class="w-full bg-slate-900/60 border border-slate-700/50 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all cursor-pointer">
                     <option value="Highway">Highway</option>
                     <option value="Off-road">Off-road</option>
                     <option value="Curvy">Curvy</option>
@@ -108,7 +125,7 @@
                 </select>
             </div>
 
-            <button onclick="calculateRoute()" class="btn-primary w-full py-4 rounded-xl text-black font-extrabold text-sm uppercase tracking-widest mt-4">
+            <button onclick="calculateRoute()" class="btn-primary w-full py-4 rounded-xl text-slate-900 font-extrabold text-sm uppercase tracking-widest mt-4 shadow-xl active:scale-95 transition-transform">
                 Plan My Ride
             </button>
         </div>
@@ -116,10 +133,10 @@
         <div id="result-container" class="mt-8 hidden">
             <div id="result-box" class="p-6 rounded-2xl border-l-4">
                 <h3 id="result-title" class="text-xl font-extrabold mb-1"></h3>
-                <p id="result-desc" class="text-sm opacity-90 mb-3"></p>
+                <p id="result-desc" class="text-sm opacity-95 mb-4 leading-relaxed"></p>
                 <div class="pt-3 border-t border-white/10">
-                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Logic Pattern Match</p>
-                    <span id="logic-tag" class="text-[10px] font-mono text-amber-500"></span>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Logic Pattern Match</p>
+                    <span id="logic-tag" class="text-[10px] font-mono text-amber-400"></span>
                 </div>
             </div>
         </div>
@@ -141,96 +158,93 @@
 
             let resTitle = "";
             let resDesc = "";
-            let resType = "success"; // success, warning, error
+            let resType = "success"; 
 
             // LOGIC IMPLEMENTATION
-            // 1. Legal Priority Check
             if (d === "Missing") {
                 resTitle = "Izmir Ülkü Park";
-                resDesc = "Condition Detected: Missing Documents. You should not use public roads. Enjoy the professional, closed track environment in Pınarbaşı for legal and safe riding.";
+                resDesc = "Condition Detected: Missing Documents. Safety first! Public roads are not legally permitted for your current status. We recommend the professional closed track in Pınarbaşı for a safe and adrenaline-filled experience.";
                 resType = "warning";
             }
-            // 2. Compatibility Priority Check
             else if ((t === "Racing" || t === "Scooter") && r === "Off-road") {
                 resTitle = "Vehicle Mismatch Error";
-                resDesc = "Warning: Racing bikes and Scooters are not physically equipped for off-road terrains like forest trails or dirt paths.";
+                resDesc = "Warning: Physical limitation detected. Racing bikes and Scooters are not equipped for off-road terrains like forest trails or loose dirt. Please select a compatible road type.";
                 resType = "error";
             }
-            // 3. Routing Matrix
             else if (s === "Aggressive" && r === "Highway") {
                 resTitle = "Kuzey Ege Highway";
-                resDesc = "Optimized for high-speed stability and wide asphalt lanes. Great for clearing your mind on long straights.";
+                resDesc = "The perfect choice for high-speed stability and wide lanes. This corridor offers the best asphalt quality for aggressive power delivery.";
             }
             else if (s === "Long Way" && c === "600+" && r === "Highway") {
                 resTitle = "Efes - Meryem Ana Route";
-                resDesc = "A premium long-distance tour. Enjoy the power on the highway followed by the iconic winding climb to the House of the Virgin Mary.";
+                resDesc = "A premium tour for high-capacity machines. A fast highway run followed by technical, scenic bends climbing up to the historic House of Virgin Mary.";
             }
             else if (s === "Long Way" && (c === "0-250" || c === "251-599") && r === "Scenic") {
                 resTitle = "İzmir - Foça Route";
-                resDesc = "A beautiful coastal journey. Steady pace and great views along the northern shore.";
+                resDesc = "The quintessential coastal journey. A steady, enjoyable pace along the north coast with plenty of scenic stops.";
             }
             else if (s === "Long Way" && c === "0-250" && r === "Highway") {
                 resTitle = "Foça Highway Connection";
-                resDesc = "Specifically selected safe highway links that offer the best visibility for lower capacity engines heading north.";
+                resDesc = "Strategic highway links optimized for smaller engines to maintain visibility and safety while heading towards the northern coast.";
             }
             else if (r === "Scenic" && s === "Chill" && c === "0-250") {
                 resTitle = "Kordon to Güzelbahçe Road";
-                resDesc = "A relaxing coastal cruise through the heart of the city. Perfect for a breezy weekend ride.";
+                resDesc = "A classic city-coast cruise. Feel the sea breeze of the Gulf as you ride from the city center to the western coastline.";
             }
             else if (r === "Scenic" && t === "Scooter" && s === "Sightseeing") {
                 resTitle = "İnciraltı City Forest";
-                resDesc = "An accessible green escape. Easily navigable with a scooter and offers great shoreline views.";
+                resDesc = "The ideal scooter getaway. Quiet roads, green surroundings, and direct access to the sea-side forest paths.";
             }
             else if (r === "Scenic" && s === "Sightseeing" && c === "0-250") {
                 resTitle = "Sasalı Bird Paradise";
-                resDesc = "Ride through the peaceful nature reserve paths. A flat, calm road for nature lovers.";
+                resDesc = "A flat and peaceful route through the wildlife sanctuary. Perfect for low-speed cruising and nature photography.";
             }
             else if (r === "Scenic" && t === "Touring" && s === "Sightseeing") {
                 resTitle = "Sığacık - Seferihisar Route";
-                resDesc = "Designed for touring comfort. A scenic journey ending at the historic Cittaslow harbor.";
+                resDesc = "Touring comfort meets scenic beauty. A beautiful ride leading to the famous 'Cittaslow' harbor of Sığacık.";
             }
             else if (r === "Curvy" && t === "Racing" && s === "Aggressive") {
                 resTitle = "Karaburun Bends";
-                resDesc = "Technical, sharp turns that demand high concentration. The gold standard for technical riding in İzmir.";
+                resDesc = "The ultimate test of precision. These technical curves on the peninsula are the favorite for sportbike enthusiasts.";
             }
             else if (r === "Curvy" && s === "Sightseeing") {
                 resTitle = "Varyant - Konak Curves";
-                resDesc = "Iconic short curves overlooking the city and the Gulf. Great for a quick sightseeing session.";
+                resDesc = "Short, technical, and iconic. These historic curves offer one of the best panoramic views of the İzmir Clock Tower and bay.";
             }
             else if (r === "Curvy" && t === "Enduro" && s === "Aggressive") {
                 resTitle = "Yaka Köy - Çiçekli Forest Road";
-                resDesc = "Technical asphalt through narrow forest passes. Excellent for enduro handling on tarmac.";
+                resDesc = "Tight, technical asphalt winding through the forest. High adrenaline for riders who love technical handling.";
             }
             else if (r === "Curvy") {
                 resTitle = "Sabuncubeli Pass";
-                resDesc = "The classic mountain pass connecting İzmir and Manisa. Steep climbs and rhythmic curves.";
+                resDesc = "A classic mountain pass between İzmir and Manisa. Wide rhythmic curves and significant elevation changes.";
             }
             else if (r === "Off-road" && (t === "Enduro" || t === "Touring")) {
                 resTitle = "Homeros Valley - Dirt Paths";
-                resDesc = "Adventure-ready dirt paths. Ideal for dual-sport bikes and riders seeking natural terrain.";
+                resDesc = "True adventure terrain. Dirt trails and unpaved paths designed for dual-sport capabilities and nature exploration.";
             }
             else {
-                resTitle = "İzmir Perimeter Route";
-                resDesc = "A balanced journey through İzmir's main arteries, adjusted for your current motorcycle profile.";
+                resTitle = "İzmir Coastal Explorer";
+                resDesc = "A general purpose route through the bay area, balanced for your current engine capacity and riding style.";
             }
 
-            // UI Display
+            // Display Logic
             title.innerText = resTitle;
             desc.innerText = resDesc;
-            tag.innerText = `${d} | ${t} | ${s} | ${c}cc | ${r}`;
+            tag.innerText = `${d} | ${t} | ${S.value} | ${c} | ${r}`;
             
             container.classList.remove('hidden');
             container.classList.add('result-fade-in');
 
             if (resType === "error") {
-                box.className = "p-6 rounded-2xl border-l-4 bg-red-900/20 border-red-500 text-red-200";
+                box.className = "p-6 rounded-2xl border-l-4 bg-red-900/50 border-red-500 text-red-50 shadow-2xl";
             } else if (resType === "warning") {
-                box.className = "p-6 rounded-2xl border-l-4 bg-amber-900/20 border-amber-500 text-amber-200";
+                box.className = "p-6 rounded-2xl border-l-4 bg-amber-900/50 border-amber-500 text-amber-50 shadow-2xl";
             } else {
-                box.className = "p-6 rounded-2xl border-l-4 bg-emerald-900/20 border-emerald-500 text-emerald-200";
+                box.className = "p-6 rounded-2xl border-l-4 bg-emerald-900/50 border-emerald-500 text-emerald-50 shadow-2xl";
             }
 
-            setTimeout(() => container.classList.remove('result-fade-in'), 500);
+            setTimeout(() => container.classList.remove('result-fade-in'), 600);
         }
     </script>
 </body>
