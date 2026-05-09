@@ -12,7 +12,7 @@
 
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            /* Arka Plan: İzmir Genel Manzarası */
+            /* Background: Izmir View */
             background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
                         url('https://images.pexels.com/photos/15206533/pexels-photo-15206533.jpeg') no-repeat center center fixed;
             background-size: cover;
@@ -149,6 +149,11 @@
             line-height: 1.7;
             margin: 0;
         }
+
+        .warning-text {
+            color: #e74c3c;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -232,25 +237,34 @@
 
         let rName, rDesc, rImg;
 
-        // --- 15-POINT LOCAL LOGIC STRINGS ---
+        // --- STEP 1: LOGIC CONSTRAINTS (Logic Safety Check) ---
+        if ((type === 'Racing' || type === 'Scooter' || type === 'Touring') && road === 'Off-road') {
+            rName = "Incompatible Route";
+            rDesc = "Warning: A " + type + " motorcycle is not suitable for Off-road terrain. Please choose Enduro or change the road type.";
+            rImg = "https://images.pexels.com/photos/4064527/pexels-photo-4064527.jpeg";
+            displayResult(rName, rDesc, rImg, true);
+            return;
+        }
+
+        // --- STEP 2: 15-POINT LOGIC MATRIX ---
         if (docs === 'yes') {
             rName = "Ülkü Race Track (Pınarbaşı)";
             rDesc = "Safety Alert: Since you have missing documents, the only legal place to ride is the professional track in Pınarbaşı.";
             rImg = "https://images.pexels.com/photos/163789/race-car-race-track-speedway-auto-racing-163789.jpeg";
         } 
         else if (road === 'Highway' && cc === '600+' && style === 'Aggresive') {
-            rName = "Kuzey Ege Highway";
-            rDesc = "Perfect for high-CC engines to test limits. Wide lanes and smooth asphalt for a focused speed run.";
+            rName = "Oto Kuzey Ege Highway";
+            rDesc = "Perfect for high-CC engines to test limits on wide lanes and smooth asphalt.";
             rImg = "https://images.pexels.com/photos/2583471/pexels-photo-2583471.jpeg";
         }
         else if (type === 'Enduro' && road === 'Off-road' && style === 'Aggresive') {
             rName = "Balçova Therapy Forest";
-            rDesc = "Hardcore technical trails. Steep climbs and narrow paths for experienced Enduro riders.";
+            rDesc = "Hardcore technical trails with steep climbs for experienced Enduro riders.";
             rImg = "https://images.pexels.com/photos/1038935/pexels-photo-1038935.jpeg";
         }
         else if (road === 'Off-road') {
             rName = "Homeros Valley (Bornova)";
-            rDesc = "A great off-road experience surrounded by nature. Perfect for exploring İzmir's hidden valleys.";
+            rDesc = "Explore hidden dirt paths and nature. Perfect for a balanced off-road adventure.";
             rImg = "https://images.pexels.com/photos/914804/pexels-photo-914804.jpeg";
         }
         else if (type === 'Naked' && road === 'Curvy' && cc === '600+') {
@@ -260,32 +274,32 @@
         }
         else if (road === 'Curvy' && road === 'View') {
             rName = "Karaburun Curvy Road";
-            rDesc = "Legendary seaside curves. A mix of technical riding and breathtaking Aegean views.";
+            rDesc = "Legendary seaside bends. A mix of technical riding and breathtaking Aegean views.";
             rImg = "https://images.pexels.com/photos/2361601/pexels-photo-2361601.jpeg";
         }
         else if (style === 'Long way' && road === 'View') {
             rName = "İzmir Center to Foça Marina";
-            rDesc = "A beautiful long-distance ride cruise leading to the historical Foça port.";
+            rDesc = "A beautiful long-distance cruise leading to the historical Foça port.";
             rImg = "https://images.pexels.com/photos/3405001/pexels-photo-3405001.jpeg";
         }
         else if (type === 'Scooter' && style === 'Chill') {
             rName = "İnciraltı Coastline";
-            rDesc = "Relaxed city favorite. Great for a quick escape to the sea breeze without leaving the city.";
+            rDesc = "Relaxed city favorite. Great for a quick escape to the sea breeze.";
             rImg = "https://images.pexels.com/photos/13444002/pexels-photo-13444002.jpeg";
         }
         else if (style === 'Sightseeing' && road === 'View') {
-            rName = "Alsancak Kordon to Güzelbahçe";
-            rDesc = "Ride the entire coastline of İzmir. Sunset views all the way from Kordon to Güzelbahçe.";
+            rName = "Alsancak Kordon - Güzelbahçe";
+            rDesc = "Ride the entire coastline of İzmir. Sunset views all the way to Güzelbahçe.";
             rImg = "https://images.pexels.com/photos/14833216/pexels-photo-14833216.jpeg";
         }
         else if (type === 'Racing' && road === 'Curvy') {
             rName = "Urla Old Coastal Pass";
-            rDesc = "Sharp bends and sea level riding. A focused route for agile sports bikes.";
+            rDesc = "Sharp technical corners at sea level. Perfect for agile sports bikes.";
             rImg = "https://images.pexels.com/photos/1546901/pexels-photo-1546901.jpeg";
         }
         else if (type === 'Touring' && style === 'Chill') {
             rName = "Seferihisar Side Roads";
-            rDesc = "Peaceful, low-traffic roads perfect for a heavy touring bike and a relaxed pace.";
+            rDesc = "Peaceful, low-traffic village roads for a relaxed touring pace.";
             rImg = "https://images.pexels.com/photos/931007/pexels-photo-931007.jpeg";
         }
         else if (type === 'Naked' && style === 'Chill') {
@@ -295,7 +309,7 @@
         }
         else if (cc === '0-250cc' && road === 'Curvy') {
             rName = "Gülbahçe Village Route";
-            rDesc = "Safe fun for entry-level riders. Low traffic and sweet curves near the beach.";
+            rDesc = "Safe fun for entry-level riders with low traffic and sweet curves.";
             rImg = "https://images.pexels.com/photos/4039474/pexels-photo-4039474.jpeg";
         }
         else if (type === 'Enduro' && style === 'Long way') {
@@ -304,18 +318,31 @@
             rImg = "https://images.pexels.com/photos/1038935/pexels-photo-1038935.jpeg";
         }
         else {
-            rName = "İzmir - Çeşme Highway Cruise";
-            rDesc = "The classic local route. Steady wind and safe asphalt for a standard weekend cruise.";
+            rName = "İzmir Bay Coastal Cruise";
+            rDesc = "Standard local route. Safe asphalt and steady wind for a weekend cruise.";
             rImg = "https://images.pexels.com/photos/2583471/pexels-photo-2583471.jpeg";
         }
 
-        // Display results
-        title.innerText = rName;
-        desc.innerText = rDesc;
-        img.src = rImg;
-        box.style.display = "block";
+        displayResult(rName, rDesc, rImg, false);
+    }
+
+    function displayResult(name, desc, imgUrl, isError) {
+        const box = document.getElementById('result-box');
+        const img = document.getElementById('route-image');
+        const title = document.getElementById('route-title');
+        const description = document.getElementById('route-description');
+
+        title.innerText = name;
+        description.innerText = desc;
+        img.src = imgUrl;
         
-        // Auto-scroll to result
+        if(isError) {
+            title.classList.add('warning-text');
+        } else {
+            title.classList.remove('warning-text');
+        }
+
+        box.style.display = "block";
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 </script>
