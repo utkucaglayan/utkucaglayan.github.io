@@ -3,148 +3,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Izmir MotoRoute - Strict Logic Planner</title>
+    <title>Izmir MotoRoute - Personal Guide</title>
     <style>
-        :root { --primary: #f39c12; --danger: #e74c3c; --bg-overlay: rgba(0, 0, 0, 0.85); }
+        :root {
+            --primary: #f39c12; /* Moto Orange */
+            --bg-overlay: rgba(0, 0, 0, 0.85);
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            /* Background: Izmir View */
             background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
                         url('https://images.pexels.com/photos/15206533/pexels-photo-15206533.jpeg') no-repeat center center fixed;
-            background-size: cover; color: white; margin: 0; display: flex; justify-content: center; padding: 20px;
+            background-size: cover;
+            color: #ffffff;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .app-card {
-            background: rgba(20, 20, 20, 0.95); max-width: 600px; width: 100%; padding: 30px;
-            border-radius: 15px; border: 2px solid var(--primary); box-shadow: 0 0 30px rgba(0,0,0,1);
+
+        .app-container {
+            background: rgba(25, 25, 25, 0.95);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.9);
+            border: 1px solid var(--primary);
+            backdrop-filter: blur(10px);
         }
-        .inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .full { grid-column: span 2; }
-        label { display: block; font-size: 12px; color: #aaa; margin-bottom: 5px; }
-        select { width: 100%; padding: 10px; border-radius: 5px; background: #333; color: white; border: 1px solid #444; }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            font-size: 28px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .input-group {
+            margin-bottom: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #bbb;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background: #1a1a1a;
+            color: white;
+            border: 1px solid #444;
+            outline: none;
+            cursor: pointer;
+            transition: border 0.3s;
+        }
+
+        select:focus {
+            border-color: var(--primary);
+        }
+
         button {
-            width: 100%; padding: 15px; margin-top: 20px; background: var(--primary); 
-            border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px;
+            width: 100%;
+            padding: 18px;
+            margin-top: 30px;
+            background: var(--primary);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-weight: 900;
+            font-size: 18px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
         }
-        #result-box { margin-top: 25px; padding: 20px; border-radius: 10px; background: #111; display: none; text-align: center; border: 1px solid #333; }
-        #route-img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; border: 1px solid var(--primary); margin-bottom: 15px; }
-        .success-title { color: var(--primary); font-size: 22px; font-weight: bold; margin-bottom: 10px; }
-        .error-title { color: var(--danger); font-size: 22px; font-weight: bold; margin-bottom: 10px; }
+
+        button:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(243, 156, 18, 0.5);
+        }
+
+        /* Result Display Area */
+        #result-box {
+            margin-top: 35px;
+            padding: 0;
+            border-radius: 15px;
+            background: #111;
+            display: none;
+            border: 1px solid #333;
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #route-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .route-info {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .route-title {
+            color: var(--primary);
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .route-desc {
+            color: #ccc;
+            font-size: 16px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .warning-text {
+            color: #e74c3c;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-<div class="app-card">
+<div class="app-container">
     <h1>MotoRoute İzmir</h1>
-    <div class="inputs">
-        <div class="full">
-            <label>Missing Documents?</label>
-            <select id="docs"><option value="no">No</option><option value="yes">Yes</option></select>
+    
+    <div class="grid-inputs">
+        <div class="input-group full-width">
+            <label>1. Missing Documents?</label>
+            <select id="docs">
+                <option value="no">No, all documents are complete</option>
+                <option value="yes">Yes, I have missing documents</option>
+            </select>
         </div>
-        <div>
-            <label>Motorcycle Type</label>
+
+        <div class="input-group">
+            <label>2. Motorcycle Type</label>
             <select id="type">
-                <option value="Racing">Racing</option><option value="Naked">Naked</option>
-                <option value="Enduro">Enduro</option><option value="Touring">Touring</option><option value="Scooter">Scooter</option>
+                <option value="Racing">Racing</option>
+                <option value="Naked">Naked</option>
+                <option value="Enduro">Enduro</option>
+                <option value="Touring">Touring</option>
+                <option value="Scooter">Scooter</option>
             </select>
         </div>
-        <div>
-            <label>Riding Style</label>
+
+        <div class="input-group">
+            <label>3. Riding Style</label>
             <select id="style">
-                <option value="Aggresive">Aggressive</option><option value="Chill">Chill</option>
-                <option value="Sightseeing">Sightseeing</option><option value="Long way">Long way</option>
+                <option value="Aggresive">Aggressive</option>
+                <option value="Chill">Chill</option>
+                <option value="Sightseeing">Sightseeing</option>
+                <option value="Long way">Long way</option>
             </select>
         </div>
-        <div>
-            <label>Engine CC</label>
-            <select id="cc"><option value="0-250cc">0-250cc</option><option value="251-599cc">251-599cc</option><option value="600+">600cc+</option></select>
+
+        <div class="input-group">
+            <label>4. Engine CC</label>
+            <select id="cc">
+                <option value="0-250cc">0-250cc</option>
+                <option value="251-599cc">251-599cc</option>
+                <option value="600+">600cc & Above</option>
+            </select>
         </div>
-        <div>
-            <label>Road Type</label>
-            <select id="road"><option value="Highway">Highway</option><option value="Off-road">Off-road</option><option value="Curvy">Curvy</option><option value="View">View</option></select>
+
+        <div class="input-group">
+            <label>5. Road Type</label>
+            <select id="road">
+                <option value="Highway">Highway</option>
+                <option value="Off-road">Off-road</option>
+                <option value="Curvy">Curvy</option>
+                <option value="View">Scenic View</option>
+            </select>
         </div>
     </div>
 
-    <button onclick="calculateRoute()">PLAN MY ROUTE</button>
+    <button onclick="generateRecommendation()">Explore My Route</button>
 
     <div id="result-box">
-        <img id="route-img" src="" alt="Preview">
-        <div id="route-title" class="success-title"></div>
-        <p id="route-desc"></p>
+        <img id="route-image" src="" alt="Route Recommendation">
+        <div class="route-info">
+            <div id="route-title" class="route-title"></div>
+            <p id="route-description" class="route-desc"></p>
+        </div>
     </div>
 </div>
 
 <script>
-    function calculateRoute() {
+    function generateRecommendation() {
         const docs = document.getElementById('docs').value;
         const type = document.getElementById('type').value;
         const style = document.getElementById('style').value;
-        const road = document.getElementById('road').value;
         const cc = document.getElementById('cc').value;
+        const road = document.getElementById('road').value;
         
         const box = document.getElementById('result-box');
-        const img = document.getElementById('route-img');
+        const img = document.getElementById('route-image');
         const title = document.getElementById('route-title');
-        const desc = document.getElementById('route-desc');
+        const desc = document.getElementById('route-description');
 
-        box.style.display = "block";
+        let rName, rDesc, rImg;
 
-        // --- 1. ÖNCELİK: GÜVENLİK KAPISI ---
-        if (docs === 'yes') {
-            title.innerText = "Ülkü Race Track (Pınarbaşı)";
-            title.className = "success-title";
-            desc.innerText = "Safety Alert: Documents missing. Keep your adrenaline on the legal track.";
-            img.src = "https://images.pexels.com/photos/163789/race-car-race-track-speedway-auto-racing-163789.jpeg";
-            return;
-        }
-
-        // --- 2. ÖNCELİK: MANTIKSAL KISITLAMA (CONSTRAINT) ---
-        // Bu blok, yanlış motor-yol eşleşmelerini diğer tüm koşullardan önce yakalar.
+        // --- STEP 1: LOGIC CONSTRAINTS (Logic Safety Check) ---
         if ((type === 'Racing' || type === 'Scooter' || type === 'Touring') && road === 'Off-road') {
-            title.innerText = "Incompatible Match!";
-            title.className = "error-title";
-            desc.innerText = "Logic Error: A " + type + " bike cannot handle Off-road conditions. Please change your road type to Highway or Curvy.";
-            img.src = "https://images.pexels.com/photos/4064527/pexels-photo-4064527.jpeg";
+            rName = "Incompatible Route";
+            rDesc = "Warning: A " + type + " motorcycle is not suitable for Off-road terrain. Please choose Enduro or change the road type.";
+            rImg = "https://images.pexels.com/photos/4064527/pexels-photo-4064527.jpeg";
+            displayResult(rName, rDesc, rImg, true);
             return;
         }
 
-        // Başlık stilini normale döndür (Eğer daha önce hata verdiyse diye)
-        title.className = "success-title";
-
-        // --- 3. ANA ROTA MANTIĞI ---
-        if (style === 'Aggresive' && road === 'Highway' && cc === '600+') {
-            title.innerText = "Kuzey Ege Highway";
-            desc.innerText = "High speed and aggressive riding on the best asphalt in the North.";
-            img.src = "https://images.pexels.com/photos/2583471/pexels-photo-2583471.jpeg";
+        // --- STEP 2: 15-POINT LOGIC MATRIX ---
+        if (docs === 'yes') {
+            rName = "Ülkü Race Track (Pınarbaşı)";
+            rDesc = "Safety Alert: Since you have missing documents, the only legal place to ride is the professional track in Pınarbaşı.";
+            rImg = "https://images.pexels.com/photos/163789/race-car-race-track-speedway-auto-racing-163789.jpeg";
+        } 
+        else if (road === 'Highway' && cc === '600+' && style === 'Aggresive') {
+            rName = "Oto Kuzey Ege Highway";
+            rDesc = "Perfect for high-CC engines to test limits on wide lanes and smooth asphalt.";
+            rImg = "https://images.pexels.com/photos/2583471/pexels-photo-2583471.jpeg";
         }
-        else if (style === 'Aggresive' && road === 'Curvy') {
-            title.innerText = "Sabuncubeli Curves";
-            desc.innerText = "Tight cornering for aggressive riders. Experience the old Manisa road curves.";
-            img.src = "https://images.pexels.com/photos/1546901/pexels-photo-1546901.jpeg";
+        else if (road === 'Highway') {
+            rName = "İzmir - Çeşme Highway";
+            rDesc = "The classic highway run. Safe asphalt and steady winds for a standard cruise.";
+            rImg = "https://images.pexels.com/photos/2583471/pexels-photo-2583471.jpeg";
         }
-        else if (style === 'Sightseeing' && road === 'Curvy') {
-            title.innerText = "Karaburun Curvy Road";
-            desc.innerText = "Legendary curves with a view. Perfect for sightseeing at a technical pace.";
-            img.src = "https://images.pexels.com/photos/15194512/pexels-photo-15194512.jpeg";
+        else if (type === 'Enduro' && road === 'Off-road' && style === 'Aggresive') {
+            rName = "Balçova Therapy Forest";
+            rDesc = "Hardcore technical trails with steep climbs for experienced Enduro riders.";
+            rImg = "https://images.pexels.com/photos/1038935/pexels-photo-1038935.jpeg";
         }
-        else if (type === 'Enduro' && road === 'Off-road') {
-            title.innerText = "Balçova Therapy Forest";
-            desc.innerText = "Professional Enduro trails. Mud, rocks, and technical climbs.";
-            img.src = "https://images.pexels.com/photos/1038935/pexels-photo-1038935.jpeg";
+        else if (road === 'Off-road') {
+            rName = "Homeros Valley (Bornova)";
+            rDesc = "Explore hidden dirt paths and nature. Perfect for a balanced off-road adventure.";
+            rImg = "https://images.pexels.com/photos/914804/pexels-photo-914804.jpeg";
+        }
+        else if (type === 'Naked' && road === 'Curvy' && cc === '600+') {
+            rName = "Sabuncubeli Curves";
+            rDesc = "Technical bends on the old Manisa road. Ideal for Naked bikes with high torque.";
+            rImg = "https://images.pexels.com/photos/1546901/pexels-photo-1546901.jpeg";
+        }
+        else if (road === 'Curvy' && road === 'View') {
+            rName = "Karaburun Curvy Road";
+            rDesc = "Legendary seaside bends. A mix of technical riding and breathtaking Aegean views.";
+            rImg = "https://images.pexels.com/photos/2361601/pexels-photo-2361601.jpeg";
         }
         else if (style === 'Long way' && road === 'View') {
-            title.innerText = "İzmir Center to Foça Marina";
-            desc.innerText = "A long-distance coastal cruise for a peaceful journey.";
-            img.src = "https://images.pexels.com/photos/2361601/pexels-photo-2361601.jpeg";
+            rName = "İzmir Center to Foça Marina";
+            rDesc = "A beautiful long-distance cruise leading to the historical Foça port.";
+            rImg = "https://images.pexels.com/photos/3405001/pexels-photo-3405001.jpeg";
         }
-        else if (style === 'Chill' || type === 'Scooter') {
-            title.innerText = "İnciraltı Coastline";
-            desc.innerText = "A relaxed evening cruise by the sea. Perfect for light riding.";
-            img.src = "https://images.pexels.com/photos/3405001/pexels-photo-3405001.jpeg";
+        else if (type === 'Scooter' && style === 'Chill') {
+            rName = "İnciraltı Coastline";
+            rDesc = "Relaxed city favorite. Great for a quick escape to the sea breeze.";
+            rImg = "https://images.pexels.com/photos/13444002/pexels-photo-13444002.jpeg";
+        }
+        else if (style === 'Sightseeing' && road === 'View') {
+            rName = "Alsancak Kordon - Güzelbahçe";
+            rDesc = "Ride the entire coastline of İzmir. Sunset views all the way to Güzelbahçe.";
+            rImg = "https://images.pexels.com/photos/14833216/pexels-photo-14833216.jpeg";
+        }
+        else if (type === 'Racing' && road === 'Curvy') {
+            rName = "Urla Old Coastal Pass";
+            rDesc = "Sharp technical corners at sea level. Perfect for agile sports bikes.";
+            rImg = "https://images.pexels.com/photos/1546901/pexels-photo-1546901.jpeg";
+        }
+        else if (type === 'Touring' && style === 'Chill') {
+            rName = "Seferihisar Side Roads";
+            rDesc = "Peaceful, low-traffic village roads for a relaxed touring pace.";
+            rImg = "https://images.pexels.com/photos/931007/pexels-photo-931007.jpeg";
+        }
+        else if (type === 'Naked' && style === 'Chill') {
+            rName = "Göztepe - Sahilevleri";
+            rDesc = "Short city hops with plenty of stops. Great for a quick evening cruise.";
+            rImg = "https://images.pexels.com/photos/3228741/pexels-photo-3228741.jpeg";
+        }
+        else if (cc === '0-250cc' && road === 'Curvy') {
+            rName = "Gülbahçe Village Route";
+            rDesc = "Safe fun for entry-level riders with low traffic and sweet curves.";
+            rImg = "https://images.pexels.com/photos/4039474/pexels-photo-4039474.jpeg";
+        }
+        else if (type === 'Enduro' && style === 'Long way') {
+            rName = "Bergama Kozak Plateau";
+            rDesc = "A long ride through pine forests. Best for adventurous riders seeking mountain air.";
+            rImg = "https://images.pexels.com/photos/1038935/pexels-photo-1038935.jpeg";
         }
         else {
-            title.innerText = "Alsancak Kordon - Güzelbahçe Coast";
-            desc.innerText = "Explore the heart of İzmir's coastline at your own pace.";
-            img.src = "https://images.pexels.com/photos/15206533/pexels-photo-15206533.jpeg";
+            rName = "Alsancak Kordon - Güzelbahçe";
+            rDesc = "Standard local route. Safe asphalt and steady wind for a weekend cruise.";
+            rImg = "https://images.pexels.com/photos/14833216/pexels-photo-14833216.jpeg";
         }
+
+        displayResult(rName, rDesc, rImg, false);
+    }
+
+    function displayResult(name, desc, imgUrl, isError) {
+        const box = document.getElementById('result-box');
+        const img = document.getElementById('route-image');
+        const title = document.getElementById('route-title');
+        const description = document.getElementById('route-description');
+
+        title.innerText = name;
+        description.innerText = desc;
+        img.src = imgUrl;
+        
+        if(isError) {
+            title.classList.add('warning-text');
+        } else {
+            title.classList.remove('warning-text');
+        }
+
+        box.style.display = "block";
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 </script>
 
