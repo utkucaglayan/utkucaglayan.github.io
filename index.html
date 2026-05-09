@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Izmir MotoRoute - Style Based Planner</title>
+    <title>Izmir MotoRoute - Strict Logic Planner</title>
     <style>
-        :root { --primary: #f39c12; --bg-overlay: rgba(0, 0, 0, 0.85); }
+        :root { --primary: #f39c12; --danger: #e74c3c; --bg-overlay: rgba(0, 0, 0, 0.85); }
         body {
             font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
@@ -24,9 +24,10 @@
             width: 100%; padding: 15px; margin-top: 20px; background: var(--primary); 
             border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px;
         }
-        #result-box { margin-top: 25px; padding: 20px; border-radius: 10px; background: #111; display: none; text-align: center; }
+        #result-box { margin-top: 25px; padding: 20px; border-radius: 10px; background: #111; display: none; text-align: center; border: 1px solid #333; }
         #route-img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; border: 1px solid var(--primary); margin-bottom: 15px; }
         .success-title { color: var(--primary); font-size: 22px; font-weight: bold; margin-bottom: 10px; }
+        .error-title { color: var(--danger); font-size: 22px; font-weight: bold; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -62,7 +63,7 @@
         </div>
     </div>
 
-    <button onclick="calculateRoute()">FIND MY ROUTE</button>
+    <button onclick="calculateRoute()">PLAN MY ROUTE</button>
 
     <div id="result-box">
         <img id="route-img" src="" alt="Preview">
@@ -86,48 +87,62 @@
 
         box.style.display = "block";
 
-        // 1. GÜVENLİK KAPISI
+        // --- 1. ÖNCELİK: GÜVENLİK KAPISI ---
         if (docs === 'yes') {
             title.innerText = "Ülkü Race Track (Pınarbaşı)";
-            desc.innerText = "Documents missing? No problem. Enjoy your speed at the professional track.";
+            title.className = "success-title";
+            desc.innerText = "Safety Alert: Documents missing. Keep your adrenaline on the legal track.";
             img.src = "https://images.pexels.com/photos/163789/race-car-race-track-speedway-auto-racing-163789.jpeg";
             return;
         }
 
-        // 2. STİL VE YOL ODAKLI MANTIK (LOGIC STRINGS)
+        // --- 2. ÖNCELİK: MANTIKSAL KISITLAMA (CONSTRAINT) ---
+        // Bu blok, yanlış motor-yol eşleşmelerini diğer tüm koşullardan önce yakalar.
+        if ((type === 'Racing' || type === 'Scooter' || type === 'Touring') && road === 'Off-road') {
+            title.innerText = "Incompatible Match!";
+            title.className = "error-title";
+            desc.innerText = "Logic Error: A " + type + " bike cannot handle Off-road conditions. Please change your road type to Highway or Curvy.";
+            img.src = "https://images.pexels.com/photos/4064527/pexels-photo-4064527.jpeg";
+            return;
+        }
+
+        // Başlık stilini normale döndür (Eğer daha önce hata verdiyse diye)
+        title.className = "success-title";
+
+        // --- 3. ANA ROTA MANTIĞI ---
         if (style === 'Aggresive' && road === 'Highway' && cc === '600+') {
             title.innerText = "Kuzey Ege Highway";
-            desc.innerText = "High speed and adrenaline. The North Aegean route is perfect for aggressive riding.";
+            desc.innerText = "High speed and aggressive riding on the best asphalt in the North.";
             img.src = "https://images.pexels.com/photos/2583471/pexels-photo-2583471.jpeg";
         }
         else if (style === 'Aggresive' && road === 'Curvy') {
             title.innerText = "Sabuncubeli Curves";
-            desc.innerText = "Tight corners for high-torque performance. Watch the apex!";
+            desc.innerText = "Tight cornering for aggressive riders. Experience the old Manisa road curves.";
             img.src = "https://images.pexels.com/photos/1546901/pexels-photo-1546901.jpeg";
         }
         else if (style === 'Sightseeing' && road === 'Curvy') {
             title.innerText = "Karaburun Curvy Road";
-            desc.innerText = "Lean into the curves while enjoying the legendary coastal views.";
+            desc.innerText = "Legendary curves with a view. Perfect for sightseeing at a technical pace.";
             img.src = "https://images.pexels.com/photos/15194512/pexels-photo-15194512.jpeg";
-        }
-        else if (style === 'Long way' && road === 'View') {
-            title.innerText = "İzmir Center to Foça Marina";
-            desc.innerText = "A long, steady ride with beautiful scenery leading to the marina.";
-            img.src = "https://images.pexels.com/photos/2361601/pexels-photo-2361601.jpeg";
         }
         else if (type === 'Enduro' && road === 'Off-road') {
             title.innerText = "Balçova Therapy Forest";
-            desc.innerText = "Technical dirt trails and steep climbs in the forest.";
+            desc.innerText = "Professional Enduro trails. Mud, rocks, and technical climbs.";
             img.src = "https://images.pexels.com/photos/1038935/pexels-photo-1038935.jpeg";
+        }
+        else if (style === 'Long way' && road === 'View') {
+            title.innerText = "İzmir Center to Foça Marina";
+            desc.innerText = "A long-distance coastal cruise for a peaceful journey.";
+            img.src = "https://images.pexels.com/photos/2361601/pexels-photo-2361601.jpeg";
         }
         else if (style === 'Chill' || type === 'Scooter') {
             title.innerText = "İnciraltı Coastline";
-            desc.innerText = "Maximum relax. A smooth sea breeze ride for a chill day.";
+            desc.innerText = "A relaxed evening cruise by the sea. Perfect for light riding.";
             img.src = "https://images.pexels.com/photos/3405001/pexels-photo-3405001.jpeg";
         }
         else {
             title.innerText = "Alsancak Kordon - Güzelbahçe Coast";
-            desc.innerText = "A versatile city coastline ride that fits almost any style.";
+            desc.innerText = "Explore the heart of İzmir's coastline at your own pace.";
             img.src = "https://images.pexels.com/photos/15206533/pexels-photo-15206533.jpeg";
         }
     }
