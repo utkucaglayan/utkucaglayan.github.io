@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>İzmir MotoRoute Planner</title>
-    <!-- Tailwind CSS for modern styling -->
+    <!-- Tailwind CSS: Modern ve hızlı arayüz tasarımı için kullanıldı -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
@@ -16,7 +16,7 @@
             background-color: #0f172a;
         }
 
-        /* Fixed Background Image with specified URL */
+        /* Sabit Arka Plan Görseli: İzmir Genel Görünümü */
         .bg-overlay {
             position: fixed;
             top: 0;
@@ -30,6 +30,7 @@
             z-index: -1;
         }
 
+        /* Cam Efekti (Glassmorphism) Kart Tasarımı */
         .glass-card {
             background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
@@ -38,9 +39,10 @@
         }
 
         .moto-accent {
-            color: #f59e0b; /* Amber 500 */
+            color: #f59e0b; /* Amber 500 rengi */
         }
 
+        /* Ana Buton Stilleri */
         .btn-primary {
             background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -51,6 +53,7 @@
             box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
         }
 
+        /* Sonuç ekranı giriş animasyonu */
         .result-fade-in {
             animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -83,7 +86,7 @@
         </header>
 
         <div class="space-y-5">
-            <!-- Documents (D) - Legal Status -->
+            <!-- Documents (D) - Yasal Durum Sorgusu -->
             <div>
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">1. Documents Missing?</label>
                 <select id="D" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 outline-none transition-all cursor-pointer">
@@ -92,7 +95,7 @@
                 </select>
             </div>
 
-            <!-- Bike Type (T) - Motor Type -->
+            <!-- Bike Type (T) - Motor Tipi -->
             <div>
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">2. Motorcycle Type</label>
                 <select id="T" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 outline-none transition-all cursor-pointer">
@@ -103,7 +106,7 @@
                 </select>
             </div>
 
-            <!-- Style (S) - Riding Style -->
+            <!-- Style (S) - Sürüş Tarzı -->
             <div>
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">3. Riding Style</label>
                 <select id="S" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 outline-none transition-all cursor-pointer">
@@ -114,7 +117,7 @@
                 </select>
             </div>
 
-            <!-- Engine CC (C) - Engine Power -->
+            <!-- Engine CC (C) - Motor Hacmi -->
             <div>
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">4. Engine Capacity</label>
                 <select id="C" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 outline-none transition-all cursor-pointer">
@@ -124,7 +127,7 @@
                 </select>
             </div>
 
-            <!-- Road Type (R) - Road Type -->
+            <!-- Road Type (R) - Yol Ortamı -->
             <div>
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">5. Road Environment</label>
                 <select id="R" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 outline-none transition-all cursor-pointer">
@@ -140,19 +143,27 @@
             </button>
         </div>
 
-        <!-- Result Container -->
+        <!-- Sonuç Bölümü -->
         <div id="result-container" class="mt-8 hidden">
-            <div id="result-box" class="p-6 rounded-2xl border-l-4">
-                <h3 id="result-title" class="text-xl font-extrabold mb-1"></h3>
-                <p id="result-desc" class="text-sm opacity-95 mb-4 leading-relaxed"></p>
+            <div id="result-box" class="p-6 rounded-2xl border-l-4 overflow-hidden">
+                <div class="flex flex-col gap-4">
+                    <!-- Rota Görseli (Daha büyük boyuta ayarlandı: h-64) -->
+                    <div id="result-img-container" class="w-full h-64 rounded-xl overflow-hidden shadow-lg border border-white/10 hidden">
+                        <img id="result-img" src="" alt="Destination" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h3 id="result-title" class="text-xl font-extrabold mb-1"></h3>
+                        <p id="result-desc" class="text-sm opacity-95 mb-4 leading-relaxed"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         /**
-         * Logic Matrix for Izmir MotoRoute Planner
-         * Mapping strings exactly as per provided decision logic.
+         * İzmir MotoRoute Planner Karar Mantığı
+         * Kullanıcı tarafından sağlanan görsellerle güncellendi.
          */
         function calculateRoute() {
             const d = document.getElementById('D').value; 
@@ -165,103 +176,121 @@
             const box = document.getElementById('result-box');
             const title = document.getElementById('result-title');
             const desc = document.getElementById('result-desc');
+            const resultImg = document.getElementById('result-img');
+            const resultImgContainer = document.getElementById('result-img-container');
 
             let resTitle = "";
             let resDesc = "";
             let resType = "success"; 
 
-            // --- LOGIC STRINGS IMPLEMENTATION ---
+            // Rota Başlıkları ve Görsel URL'leri Eşleşmesi
+            const destinationImages = {
+                "Ülkü Park Race Track": "https://www.gundemcesme.com/haber_resim/Ulku-Park-Pistinde-Nefes-Kesen-Mucadele--107691.jpg",
+                "Kuzey Ege Highway": "https://kalyonholding.com/images/yatirim-isletme.webp",
+                "Efes Meryem Ana": "https://habereksprescomtr.teimg.com/haberekspres-com-tr/uploads/2024/04/image-208db99d0a1ead25aaf46f55d8006df4a5001a1e.png",
+                "İzmir Foça Route": "https://trthaberstatic.cdn.wp.trt.com.tr/resimler/2236000/foca-izmir-a-2237981.jpg",
+                "Foça Highway Connection": "https://egetelgrafcom.teimg.com/crop/1280x720/egetelgraf-com/wp/uploads/2020/08/foca-tuzmine-otoyol-dopingi.jpg",
+                "Kordon to Güzelbahçe": "https://egetelgrafcom.teimg.com/egetelgraf-com/uploads/2025/08/4-307.jpg",
+                "Inciralti City Forest": "https://avatars.mds.yandex.net/get-searchnews-images/13860241/2a0000019786d8214d022e59956baa0c1ac1/orig",
+                "Sasalı Bird Paradise": "https://www.sinasiyuksel.com/blog/wp-content/gallery/kus-cenneti-2017/IMG_6631.JPG",
+                "Sığacık Seferihisar": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/S%C4%B1%C4%9Fac%C4%B1k_02.jpg/960px-S%C4%B1%C4%9Fac%C4%B1k_02.jpg",
+                "Karaburun Bends": "https://cdn.villacim.com.tr/uploads/3840/294_izmirkaraburungezilecekyerler.jpg",
+                "Varyant Konak": "https://izgazetenet.teimg.com/izgazete-net/uploads/2025/04/birlesmis-milletler-caddesi-varyant-3.jpg",
+                "Yaka Köy Çiçekli": "https://izgazetenet.teimg.com/izgazete-net/uploads/2024/12/koy-iz-kapak.jpg",
+                "Sabuncubeli Pass": "https://manisahaberlericom.teimg.com/manisahaberleri-com/images/upload/AW414348_07.jpg",
+                "Homeros Valley": "https://1.bp.blogspot.com/-FUoCADHP1f0/VpBNHCCh_oI/AAAAAAAACD4/4AU_itGFwK4/s1600/Homeros-Vadisi.jpg",
+                "İzmir Coastal Highway": "https://egetelgrafcom.teimg.com/egetelgraf-com/uploads/2025/03/selway-outlet-avm.webp"
+            };
+
+            // --- MANTIKSAL KARAR MATRİSİ ---
             
-            // 1. (Y) -> UP
+            // 1. Yasal Öncelik: Belgeler Eksik mi?
             if (d === "DY") {
                 resTitle = "Ülkü Park Race Track";
                 resDesc = "Documents missing. Public roads are restricted. We suggest the professional closed circuit at Ülkü Park in Pınarbaşı for legal safety.";
                 resType = "warning";
             }
-            // 2. (N) ^ (O) ^ (R v S) -> ERR
+            // 2. Fiziksel Uyumluluk: Araç ve Yol Tipi Eşleşmesi
             else if (d === "DN" && r === "RO" && (t === "TR" || t === "TS")) {
                 resTitle = "Mismatch Error";
                 resDesc = "Racing bikes and Scooters are not physically equipped for mountain trails or loose dirt. Please choose a suitable terrain.";
                 resType = "error";
             }
-            // 3. (N) ^ (H) ^ (A) ^ (3) ^ (R) -> KEH
+            // 3. Rota Önerileri
             else if (d === "DN" && r === "RH" && s === "SA" && c === "C3" && t === "TR") {
                 resTitle = "Kuzey Ege Highway";
                 resDesc = "Optimized for high-speed stability and wide asphalt lanes. Best for aggressive power delivery on high-capacity engines.";
             }
-            // 4. (N) ^ (H) ^ (W) ^ (T) -> EMN
             else if (d === "DN" && r === "RH" && s === "SW" && t === "TT") {
                 resTitle = "Efes Meryem Ana";
                 resDesc = "A premium long-distance tour combining highway comfort with iconic technical bends up to the historic site.";
             }
-            // 5. (N) ^ (H) ^ (W) ^ (2) ^ (R) -> FCH
             else if (d === "DN" && r === "RH" && s === "SW" && c === "C2" && t === "TR") {
                 resTitle = "Foça Highway Connection";
                 resDesc = "Specifically selected safe highway links for steady cruising on mid-capacity engines heading north.";
             }
-            // 6. (N) ^ (C) ^ (A) ^ (3) ^ (R) -> KBB
             else if (d === "DN" && r === "RC" && t === "TR" && s === "SA") {
                 resTitle = "Karaburun Bends";
                 resDesc = "Technical, sharp turns that demand high concentration. The gold standard for precision cornering on sportbikes.";
             }
-            // 7. (N) ^ (C) ^ (K) ^ (2) ^ (E) -> SKP
             else if (d === "DN" && r === "RC" && t === "TE" && s === "SK") {
                 resTitle = "Sabuncubeli Pass";
                 resDesc = "The classic mountain pass connecting İzmir and Manisa. Features rhythmic curves and significant elevation changes.";
             }
-            // 8. (N) ^ (C) ^ (W) ^ (2) ^ (T) -> IFR
             else if (d === "DN" && r === "RC" && t === "TT" && s === "SW" && c === "C2") {
                 resTitle = "İzmir Foça Route";
                 resDesc = "A beautiful winding journey through coastal roads. Ideal for mid-size engines seeking a long-way experience.";
             }
-            // 9. (N) ^ (V) ^ (G) ^ (3) ^ (T v R) -> KG
             else if (d === "DN" && r === "RS" && c === "C3") {
                 resTitle = "Kordon to Güzelbahçe";
                 resDesc = "A relaxing coastal cruise along the Gulf. Best for high-capacity bikes to enjoy the city skyline and open sea breeze.";
             }
-            // 10. (N) ^ (V) ^ (G) ^ (2) ^ (T) -> SIG
             else if (d === "DN" && r === "RS" && c === "C2") {
                 resTitle = "Sığacık Seferihisar";
                 resDesc = "Scenic beauty meets touring comfort. A beautiful ride leading to the historic Cittaslow harbor.";
             }
-            // 11. (N) ^ (V) ^ (K) ^ (1) ^ (S) -> ICF
             else if (d === "DN" && r === "RS" && c === "C1" && s === "SK" && t === "TS") {
                 resTitle = "Inciralti City Forest";
                 resDesc = "The ideal scooter escape within the city. Quiet forest paths and green surroundings near the shoreline.";
             }
-            // 12. (N) ^ (V) ^ (K) ^ (1) ^ (T) -> YCV
             else if (d === "DN" && r === "RS" && c === "C1" && s === "SK" && t === "TT") {
                 resTitle = "Yaka Köy Çiçekli";
                 resDesc = "A serene gezi route through forest villages. Great for low-speed cruising in a green environment.";
             }
-            // 13. (N) ^ (V) ^ (G) ^ (1) ^ (S) -> VAR
             else if (d === "DN" && r === "RS" && c === "C1" && s === "SG" && t === "TS") {
                 resTitle = "Varyant Konak";
                 resDesc = "Iconic curves overlooking the city's historical heart. Short but scenic sightseeing on a scooter.";
             }
-            // 14. (N) ^ (V) ^ (G) ^ (1) ^ (S) [Else other than Scooter] -> SAS
             else if (d === "DN" && r === "RS" && c === "C1" && s === "SG") {
                 resTitle = "Sasalı Bird Paradise";
                 resDesc = "A flat and peaceful route through the wildlife sanctuary. Perfect for low-capacity bikes and nature lovers.";
             }
-            // 15. (N) ^ (O) ^ (A) ^ (3) ^ (E) -> HVF
             else if (d === "DN" && r === "RO" && t === "TE") {
                 resTitle = "Homeros Valley";
                 resDesc = "True adventure terrain. Mountain trails and unpaved paths designed for dual-sport capabilities.";
             }
-            // Default -> DEF
             else {
                 resTitle = "İzmir Coastal Highway";
                 resDesc = "A general purpose route through the bay area, balanced for your current riding profile.";
             }
 
-            // UI Display
+            // UI Güncelleme
             title.innerText = resTitle;
             desc.innerText = resDesc;
+
+            // Görseli Göster ve Güncelle
+            const imgUrl = destinationImages[resTitle];
+            if (imgUrl) {
+                resultImg.src = imgUrl;
+                resultImgContainer.classList.remove('hidden');
+            } else {
+                resultImgContainer.classList.add('hidden');
+            }
             
             container.classList.remove('hidden');
             container.classList.add('result-fade-in');
 
+            // Sonuç tipine göre renk stilini uygula
             if (resType === "error") {
                 box.className = "p-6 rounded-2xl border-l-4 bg-red-900/50 border-red-500 text-red-50 shadow-2xl";
             } else if (resType === "warning") {
