@@ -16,15 +16,15 @@
             background-color: #0f172a;
         }
 
-        /* Fixed Background Image: Izmir Gulf/Kordon Sunset View */
+        /* Fixed Background Image with specified URL */
         .bg-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.8)), 
-                              url('https://images.unsplash.com/photo-1590757363901-383796851d7c?q=80&w=2070&auto=format&fit=crop');
+            background-image: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.85)), 
+                              url('https://www.eglengez.com/wp-content/uploads/2024/09/Izmirde-Gezilecek-Yerler-e1726472587489.jpeg');
             background-size: cover;
             background-position: center;
             z-index: -1;
@@ -152,14 +152,14 @@
     <script>
         /**
          * Logic Matrix for Izmir MotoRoute Planner
-         * Mapping strings exactly as per "date app.pdf" logic matrix.
+         * Mapping strings exactly as per provided decision logic.
          */
         function calculateRoute() {
-            const d = document.getElementById('D').value; // DY (Y), DN (N)
-            const t = document.getElementById('T').value; // TR (R), TT (T), TS (S), TE (E)
-            const s = document.getElementById('S').value; // SA (A), SK (K), SG (G), SW (W)
-            const c = document.getElementById('C').value; // C1 (1), C2 (2), C3 (3)
-            const r = document.getElementById('R').value; // RH (H), RO (O), RC (C), RS (V)
+            const d = document.getElementById('D').value; 
+            const t = document.getElementById('T').value; 
+            const s = document.getElementById('S').value; 
+            const c = document.getElementById('C').value; 
+            const r = document.getElementById('R').value; 
 
             const container = document.getElementById('result-container');
             const box = document.getElementById('result-box');
@@ -267,7 +267,7 @@
             } else if (resType === "warning") {
                 box.className = "p-6 rounded-2xl border-l-4 bg-amber-900/50 border-amber-500 text-amber-50 shadow-2xl";
             } else {
-                box.className = "p-6 rounded-2xl border-l-4 bg-emerald-900/50 border-emerald-500 text-emerald-50 shadow-2xl";
+                box.className = "p-6 rounded-2xl border-l-4 bg-emerald-900/50 border-emerald-500 text-emerald-100 shadow-2xl";
             }
 
             setTimeout(() => container.classList.remove('result-fade-in'), 600);
