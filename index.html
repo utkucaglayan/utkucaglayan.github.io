@@ -145,10 +145,6 @@
             <div id="result-box" class="p-6 rounded-2xl border-l-4">
                 <h3 id="result-title" class="text-xl font-extrabold mb-1"></h3>
                 <p id="result-desc" class="text-sm opacity-95 mb-4 leading-relaxed"></p>
-                <div class="pt-3 border-t border-white/10">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Logic String Match</p>
-                    <span id="logic-tag" class="text-[10px] font-mono text-amber-400"></span>
-                </div>
             </div>
         </div>
     </div>
@@ -169,7 +165,6 @@
             const box = document.getElementById('result-box');
             const title = document.getElementById('result-title');
             const desc = document.getElementById('result-desc');
-            const tag = document.getElementById('logic-tag');
 
             let resTitle = "";
             let resDesc = "";
@@ -250,7 +245,6 @@
             // UI Display
             title.innerText = resTitle;
             desc.innerText = resDesc;
-            tag.innerText = `${d} | ${t} | ${s} | ${c} | ${r}`;
             
             container.classList.remove('hidden');
             container.classList.add('result-fade-in');
