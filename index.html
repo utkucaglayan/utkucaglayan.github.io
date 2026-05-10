@@ -16,7 +16,7 @@
             background-color: #0f172a;
         }
 
-        /* Fixed Background Image: Izmir Clock Tower */
+        /* Sabit Arka Plan: İzmir Saat Kulesi */
         .bg-overlay {
             position: fixed;
             top: 0;
@@ -85,53 +85,53 @@
         <div class="space-y-5">
             <!-- Documents (D) -->
             <div>
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">1. Documents Missing?</label>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">1. Documents Missing? (Y/N)</label>
                 <select id="D" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 outline-none transition-all cursor-pointer">
-                    <option value="DN">No (I have all documents)</option>
-                    <option value="DY">Yes (Missing documents)</option>
+                    <option value="DN">No (N)</option>
+                    <option value="DY">Yes (Y)</option>
                 </select>
             </div>
 
             <!-- Bike Type (T) -->
             <div>
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">2. Motorcycle Type</label>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">2. Motorcycle Type (R/T/S/E)</label>
                 <select id="T" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 outline-none transition-all cursor-pointer">
-                    <option value="TR">Racing</option>
-                    <option value="TT">Touring</option>
-                    <option value="TE">Enduro</option>
-                    <option value="TS">Scooter</option>
+                    <option value="TR">Racing (R)</option>
+                    <option value="TT">Touring (T)</option>
+                    <option value="TS">Scooter (S)</option>
+                    <option value="TE">Enduro (E)</option>
                 </select>
             </div>
 
             <!-- Style (S) -->
             <div>
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">3. Riding Style</label>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">3. Riding Style (A/W/G/K)</label>
                 <select id="S" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 outline-none transition-all cursor-pointer">
-                    <option value="SA">Aggressive</option>
-                    <option value="SC">Chill</option>
-                    <option value="SV">Sightseeing</option>
-                    <option value="SW">Long Way</option>
+                    <option value="SA">Aggressive (A)</option>
+                    <option value="SC">Chill (W)</option>
+                    <option value="SW">Long Way (G)</option>
+                    <option value="SV">Sightseeing (K)</option>
                 </select>
             </div>
 
             <!-- Engine CC (C) -->
             <div>
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">4. Engine Capacity</label>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">4. Engine Capacity (1/2/3)</label>
                 <select id="C" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 outline-none transition-all cursor-pointer">
-                    <option value="C1">0 - 250cc</option>
-                    <option value="C2">251 - 599cc</option>
-                    <option value="C3">600cc and above</option>
+                    <option value="C1">0 - 250cc (1)</option>
+                    <option value="C2">251 - 599cc (2)</option>
+                    <option value="C3">600cc and above (3)</option>
                 </select>
             </div>
 
             <!-- Road Type (R) -->
             <div>
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">5. Road Environment</label>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">5. Road Environment (H/O/C/V)</label>
                 <select id="R" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-amber-500 outline-none transition-all cursor-pointer">
-                    <option value="RH">Highway</option>
-                    <option value="RO">Off-road</option>
-                    <option value="RC">Curvy</option>
-                    <option value="RS">Scenic View</option>
+                    <option value="RH">Highway (H)</option>
+                    <option value="RO">Off-road (O)</option>
+                    <option value="RC">Curvy (C)</option>
+                    <option value="RS">Scenic View (V)</option>
                 </select>
             </div>
 
@@ -152,12 +152,12 @@
     <script>
         /**
          * Logic Matrix for Izmir MotoRoute Planner
-         * Following the provided documentation rules.
+         * Mapping symbols from image_ecaada.png to local values.
          */
         function calculateRoute() {
             const d = document.getElementById('D').value; // DY, DN
-            const t = document.getElementById('T').value; // TR, TT, TE, TS
-            const s = document.getElementById('S').value; // SA, SC, SV, SW
+            const t = document.getElementById('T').value; // TR, TT, TS, TE
+            const s = document.getElementById('S').value; // SA, SC, SW, SV
             const c = document.getElementById('C').value; // C1, C2, C3
             const r = document.getElementById('R').value; // RH, RO, RC, RS
 
@@ -168,78 +168,91 @@
 
             let resTitle = "";
             let resDesc = "";
-            let resType = "success"; // success, warning, error
+            let resType = "success"; 
 
-            // LOGIC IMPLEMENTATION (Matrix Process)
+            // --- LOGIC STRINGS FROM IMAGE_ECAADA.PNG ---
             
-            // 1. Legal Priority: Missing Documents
+            // 1. (Y) -> UP
             if (d === "DY") {
                 resTitle = "Izmir Ülkü Park";
-                resDesc = "Documents are missing. For your legal safety, public roads are restricted. We recommend the professional closed circuit at Ülkü Park in Pınarbaşı.";
+                resDesc = "Görsel Mantığı (Y): Belgeler eksik olduğunda güvenlik için profesyonel kapalı pist önerilir.";
                 resType = "warning";
             }
-            // 2. Physical Priority: Vehicle Mismatch (Racing/Scooter on Off-road)
-            else if ((t === "TR" || t === "TS") && r === "RO") {
+            // 2. (N) ^ (O) ^ (R v S) -> ERR
+            else if (d === "DN" && r === "RO" && (t === "TR" || t === "TS")) {
                 resTitle = "Vehicle Mismatch Error";
-                resDesc = "Safety Alert: Racing bikes and Scooters are not physically equipped for mountain trails or loose dirt paths. Please select a compatible road type.";
+                resDesc = "Görsel Mantığı: Racing (R) veya Scooter (S) tipi araçlar Off-road (O) için uygun değildir.";
                 resType = "error";
             }
-            // 3. Routing Matrix
-            else if (s === "SA" && r === "RH") {
+            // 3. (N) ^ (H) ^ (A) ^ (3) ^ (R) -> KEH
+            else if (d === "DN" && r === "RH" && s === "SA" && c === "C3" && t === "TR") {
                 resTitle = "Kuzey Ege Highway";
-                resDesc = "The perfect choice for high-speed stability and wide asphalt lanes. Optimized for aggressive power delivery.";
+                resDesc = "Görsel Mantığı: Yüksek güç (3), agresif stil (A) ve otoban (H) birleşimi.";
             }
-            else if (s === "SW" && c === "C3" && r === "RH") {
+            // 4. (N) ^ (H) ^ (W) ^ (T) -> EMN
+            else if (d === "DN" && r === "RH" && s === "SC" && t === "TT") {
                 resTitle = "Efes - Meryem Ana Route";
-                resDesc = "A premium long-distance tour for high-power machines. Fast highway run followed by technical scenic bends.";
+                resDesc = "Görsel Mantığı: Otoban (H) ve Touring (T) ile keyifli (W) uzun sürüş.";
             }
-            else if (s === "SW" && (c === "C1" || c === "C2") && r === "RS") {
+            // 5. (N) ^ (C) ^ (W) ^ (2) ^ (T) -> IFR
+            else if (d === "DN" && r === "RC" && s === "SC" && c === "C2" && t === "TT") {
                 resTitle = "İzmir - Foça Route";
-                resDesc = "The quintessential coastal journey. Steady pace along the northern coast with plenty of scenic stops.";
+                resDesc = "Görsel Mantığı: Virajlı yollar (C), orta hacimli motor (2) ve Touring (T) seçimi.";
             }
-            else if (s === "SW" && c === "C1" && r === "RH") {
+            // 6. (N) ^ (H) ^ (W) ^ (2) ^ (R) -> FCH
+            else if (d === "DN" && r === "RH" && s === "SC" && c === "C2" && t === "TR") {
                 resTitle = "Foça Highway Connection";
-                resDesc = "Strategic highway links optimized for smaller engines to maintain visibility and safety while heading north.";
+                resDesc = "Görsel Mantığı: Otoban (H) ve Racing (R) ile orta hacimli (2) ulaşım rotası.";
             }
-            else if (r === "RS" && s === "SC" && c === "C1") {
+            // 7. (N) ^ (V) ^ (G) ^ (3) ^ (T v R) -> KG
+            else if (d === "DN" && r === "RS" && s === "SW" && c === "C3" && (t === "TT" || t === "TR")) {
                 resTitle = "Kordon to Güzelbahçe Road";
-                resDesc = "A classic city-coast cruise. Feel the breeze of the Gulf as you ride towards the western coastline.";
+                resDesc = "Görsel Mantığı: Manzaralı yol (V), uzun yol stili (G) ve yüksek kapasiteli (3) araçlar.";
             }
-            else if (r === "RS" && t === "TS" && s === "SV") {
+            // 8. (N) ^ (V) ^ (K) ^ (1) ^ (S) -> ICF
+            else if (d === "DN" && r === "RS" && s === "SV" && c === "C1" && t === "TS") {
                 resTitle = "İnciraltı City Forest";
-                resDesc = "Ideal scooter getaway. Quiet green surroundings and direct access to sea-side forest paths.";
+                resDesc = "Görsel Mantığı: Manzara (V), gezi stili (K), düşük hacim (1) ve Scooter (S).";
             }
-            else if (r === "RS" && s === "SV" && c === "C1") {
+            // 9. (N) ^ (V) ^ (G) ^ (1) ^ (S) -> SAS
+            else if (d === "DN" && r === "RS" && s === "SW" && c === "C1" && t === "TS") {
                 resTitle = "Sasalı Bird Paradise";
-                resDesc = "Flat and peaceful route through the nature sanctuary. Perfect for low-speed cruising and bird watching.";
+                resDesc = "Görsel Mantığı: Manzara (V), uzun yol stili (G), düşük hacimli (1) Scooter.";
             }
-            else if (r === "RS" && t === "TT" && s === "SV") {
+            // 10. (N) ^ (V) ^ (G) ^ (2) ^ (T) -> SIG
+            else if (d === "DN" && r === "RS" && s === "SW" && c === "C2" && t === "TT") {
                 resTitle = "Sığacık - Seferihisar Route";
-                resDesc = "Touring comfort meets scenic beauty. A beautiful ride leading to the historic 'Cittaslow' harbor.";
+                resDesc = "Görsel Mantığı: Manzara (V), uzun yol (G) ve Touring (T) konforu.";
             }
-            else if (r === "RC" && t === "TR" && s === "SA") {
+            // 11. (N) ^ (C) ^ (A) ^ (3) ^ (R) -> KBB
+            else if (d === "DN" && r === "RC" && s === "SA" && c === "C3" && t === "TR") {
                 resTitle = "Karaburun Bends";
-                resDesc = "The ultimate test of precision cornering. These technical curves on the peninsula are favored by sportbike enthusiasts.";
+                resDesc = "Görsel Mantığı: Viraj (C), agresif stil (A), yüksek güç (3) ve Racing (R).";
             }
-            else if (r === "RC" && s === "SV") {
+            // 12. (N) ^ (V) ^ (G) ^ (1) ^ (S) -> VAR
+            else if (d === "DN" && r === "RS" && s === "SW" && c === "C1" && t === "TS") {
                 resTitle = "Varyant - Konak Curves";
-                resDesc = "Short, technical, and iconic. Historic curves offering panoramic views of the Clock Tower and bay.";
+                resDesc = "Görsel Mantığı: Manzara (V), uzun yol stili (G) ve şehir içi Scooter (S).";
             }
-            else if (r === "RC" && t === "TE" && s === "SA") {
+            // 13. (N) ^ (V) ^ (K) ^ (1) ^ (T) -> YCV
+            else if (d === "DN" && r === "RS" && s === "SV" && c === "C1" && t === "TT") {
                 resTitle = "Yaka Köy - Çiçekli Forest Road";
-                resDesc = "Tight technical asphalt winding through the forest. High adrenaline for enduro bikes on tarmac.";
+                resDesc = "Görsel Mantığı: Manzara (V), gezi stili (K) ve Touring (T) uyumu.";
             }
-            else if (r === "RC") {
+            // 14. (N) ^ (C) ^ (K) ^ (2) ^ (E) -> SKP
+            else if (d === "DN" && r === "RC" && s === "SV" && c === "C2" && t === "TE") {
                 resTitle = "Sabuncubeli Pass";
-                resDesc = "A classic mountain pass connecting İzmir and Manisa. Wide rhythmic curves and elevation changes.";
+                resDesc = "Görsel Mantığı: Virajlı yol (C), gezi stili (K) ve Enduro (E) dengesi.";
             }
-            else if (r === "RO" && (t === "TE" || t === "TT")) {
+            // 15. (N) ^ (O) ^ (A) ^ (3) ^ (E) -> HVF
+            else if (d === "DN" && r === "RO" && s === "SA" && c === "C3" && t === "TE") {
                 resTitle = "Homeros Valley - Dirt Paths";
-                resDesc = "True adventure terrain. Unpaved trails designed for dual-sport capabilities and nature exploration.";
+                resDesc = "Görsel Mantığı: Off-road (O), agresif enduro stili (A) ve yüksek güç (3).";
             }
+            // ELSE -> DEF
             else {
                 resTitle = "İzmir Coastal Explorer";
-                resDesc = "A balanced journey through the city's arteries, adjusted for your current profile.";
+                resDesc = "Belirlenmiş ana matris dışındaki seçimler için önerilen dengeli şehir içi rotası.";
             }
 
             // UI Display
