@@ -80,7 +80,7 @@
     <div class="glass-card max-w-md w-full rounded-3xl p-8 shadow-2xl my-8 border border-white/5 text-slate-100">
         <header class="text-center mb-8">
             <h1 class="text-3xl font-extrabold text-white tracking-tight uppercase">
-                MotoRoute <span class="moto-accent">İzmir</span>
+                MotoRoute <span class="moto-accent">İZMİR</span>
             </h1>
             <p class="text-slate-300 text-sm mt-2 font-medium tracking-wide">Find your perfect riding route in İzmir</p>
         </header>
@@ -163,7 +163,6 @@
     <script>
         /**
          * İzmir MotoRoute Planner Karar Mantığı
-         * Kullanıcı tarafından sağlanan görsellerle güncellendi.
          */
         function calculateRoute() {
             const d = document.getElementById('D').value; 
@@ -203,20 +202,16 @@
             };
 
             // --- MANTIKSAL KARAR MATRİSİ ---
-            
-            // 1. Yasal Öncelik: Belgeler Eksik mi?
             if (d === "DY") {
                 resTitle = "Ülkü Park Race Track";
                 resDesc = "Documents missing. Public roads are restricted. We suggest the professional closed circuit at Ülkü Park in Pınarbaşı for legal safety.";
                 resType = "warning";
             }
-            // 2. Fiziksel Uyumluluk: Araç ve Yol Tipi Eşleşmesi
             else if (d === "DN" && r === "RO" && (t === "TR" || t === "TS")) {
                 resTitle = "Mismatch Error";
                 resDesc = "Racing bikes and Scooters are not physically equipped for mountain trails or loose dirt. Please choose a suitable terrain.";
                 resType = "error";
             }
-            // 3. Rota Önerileri
             else if (d === "DN" && r === "RH" && s === "SA" && c === "C3" && t === "TR") {
                 resTitle = "Kuzey Ege Highway";
                 resDesc = "Optimized for high-speed stability and wide asphalt lanes. Best for aggressive power delivery on high-capacity engines.";
